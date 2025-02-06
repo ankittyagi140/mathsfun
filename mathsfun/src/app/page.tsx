@@ -1,10 +1,12 @@
 'use client';
 
 import Header from "../components/Header";
-import { Home, Bell, Plus, LayoutDashboard, Settings, BookOpen, Trophy, HelpCircle } from 'lucide-react';
 import Footer from "../components/Footer";
 import { useTheme } from "../context/ThemeContext";
 import { useState, useEffect } from 'react';
+import Sidebar from "../components/Sidebar";
+import { useSidebar } from "../context/Sidebar";
+import Breadcrumb from "../components/Breadcrumb";
 
 interface App {
   id: string;
@@ -21,17 +23,6 @@ const allApps: App[] = [
   { id: '4', name: 'Task Manager', icon: '🎯', description: 'Manage tasks efficiently', category: 'Productivity' },
   { id: '5', name: 'Calendar', icon: '📅', description: 'Schedule your activities', category: 'Planning' },
   { id: '6', name: 'Study Material', icon: '📚', description: 'Access study resources', category: 'Education' },
-];
-
-const sidebarItems = [
-  { icon: LayoutDashboard, label: 'Dashboard' },
-  { icon: Home, label: 'My Apps' },
-  { icon: BookOpen, label: 'Learning' },
-  { icon: Trophy, label: 'Achievements' },
-  { icon: Bell, label: 'Notifications' },
-  { icon: Plus, label: 'Add apps' },
-  { icon: Settings, label: 'Settings' },
-  { icon: HelpCircle, label: 'Help & Support' },
 ];
 
 const AppGrid = ({ 
@@ -90,9 +81,9 @@ const AppGrid = ({
 
 export default function HomePage() {
   const { currentTheme } = useTheme();
+  const { activeView } = useSidebar();
   const [myApps, setMyApps] = useState<App[]>([]);
   const [installedAppIds, setInstalledAppIds] = useState<Set<string>>(new Set());
-  const [activeView, setActiveView] = useState<'dashboard' | 'myapps'>('dashboard');
 
   useEffect(() => {
     // Load installed apps from localStorage
@@ -110,48 +101,34 @@ export default function HomePage() {
     setInstalledAppIds(new Set([...installedAppIds, app.id]));
     localStorage.setItem('myApps', JSON.stringify(updatedApps));
   };
+
+  const getBreadcrumbItems = () => {
+    const items = [{ label: 'Home', path: '/' }];
+    if (activeView === 'dashboard') {
+      items.push({ label: 'Dashboard', path: '/?view=dashboard' });
+    } else if (activeView === 'myapps') {
+      items.push({ label: 'My Apps', path: '/?view=myapps' });
+    }
+    return items;
+  };
   
   return (
     <div className={`flex flex-col min-h-screen ${currentTheme.mainBg} transition-colors duration-200`}>
       <Header />
-      
       <main className="flex-1 w-full">
         <div className={`max-w-7xl mx-auto px-4 py-6 ${currentTheme.textColor}`}>
-          {/* Sidebar */}
           <div className="flex gap-6">
-            <aside className="w-64 space-y-1">
-              {sidebarItems.map((item, index) => {
-                const Icon = item.icon;
-                return (
-                  <button
-                    key={index}
-                    onClick={() => {
-                      if (item.label === 'Dashboard') setActiveView('dashboard');
-                      if (item.label === 'My Apps') setActiveView('myapps');
-                    }}
-                    className={`w-full flex items-center gap-2 px-3 py-2 rounded-md ${
-                      (item.label === 'Dashboard' && activeView === 'dashboard') ||
-                      (item.label === 'My Apps' && activeView === 'myapps')
-                        ? 'bg-blue-500 text-white'
-                        : `${currentTheme.componentBg} ${currentTheme.textColor}`
-                    } hover:bg-opacity-80 transition-colors duration-200`}
-                  >
-                    <Icon className="h-5 w-5" />
-                    <span>{item.label}</span>
-                  </button>
-                );
-              })}
-            </aside>
-
-            {/* Main Content */}
+            <Sidebar />
             <div className="flex-1">
-              <h1 className={`text-2xl font-bold mb-6 ${currentTheme.textColor}`}>
-                {activeView === 'dashboard' ? 'Dashboard' : 'My Apps'}
-              </h1>
+              <div className="mb-8">
+                <Breadcrumb items={getBreadcrumbItems()} />
+                <h1 className={`text-2xl font-bold ${currentTheme.textColor}`}>
+                  {activeView === 'dashboard' ? 'Dashboard' : 'My Apps'}
+                </h1>
+              </div>
               
               {activeView === 'dashboard' ? (
                 <>
-                  {/* My Apps Section */}
                   {myApps.length > 0 && (
                     <AppGrid 
                       apps={myApps} 
@@ -160,7 +137,6 @@ export default function HomePage() {
                     />
                   )}
                   
-                  {/* All Apps Section */}
                   <AppGrid 
                     apps={allApps} 
                     title="All Apps" 
@@ -180,7 +156,6 @@ export default function HomePage() {
           </div>
         </div>
       </main>
-      
       <Footer />
     </div>
   );
