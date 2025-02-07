@@ -1,7 +1,5 @@
 'use client';
 
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import SettingsContent from "./SettingsContent";
 import Breadcrumb from "../../components/Breadcrumb";
 import { useTheme } from "../../context/ThemeContext";
@@ -17,7 +15,6 @@ export default function SettingsPage() {
 
   return (
     <div className={`flex flex-col min-h-screen ${currentTheme.mainBg}`}>
-      <Header />
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
@@ -32,7 +29,6 @@ export default function SettingsPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

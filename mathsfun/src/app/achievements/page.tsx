@@ -1,7 +1,6 @@
 'use client';
 
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+
 import Sidebar from "../../components/Sidebar";
 import Breadcrumb from "../../components/Breadcrumb";
 import { useTheme } from "../../context/ThemeContext";
@@ -99,7 +98,6 @@ export default function AchievementsPage() {
 
   return (
     <div className={`flex flex-col min-h-screen ${currentTheme.mainBg}`}>
-      <Header />
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
@@ -197,7 +195,6 @@ export default function AchievementsPage() {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

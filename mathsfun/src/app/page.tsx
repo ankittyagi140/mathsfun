@@ -1,12 +1,12 @@
 'use client';
-
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { useTheme } from "../context/ThemeContext";
 import { useState, useEffect } from 'react';
 import Sidebar from "../components/Sidebar";
 import { useSidebar } from "../context/Sidebar";
 import Breadcrumb from "../components/Breadcrumb";
+import AppCard from '../components/AppCard';
+
+import Link from 'next/link';
 
 interface App {
   id: string;
@@ -14,15 +14,74 @@ interface App {
   icon: string;
   description: string;
   category: string;
+  path: string;
 }
 
 const allApps: App[] = [
-  { id: '1', name: 'Learning App', icon: '🎓', description: 'Track your learning progress', category: 'Education' },
-  { id: '2', name: 'Analytics Dashboard', icon: '📊', description: 'View your performance', category: 'Analytics' },
-  { id: '3', name: 'Note Taking', icon: '📝', description: 'Take and organize notes', category: 'Productivity' },
-  { id: '4', name: 'Task Manager', icon: '🎯', description: 'Manage tasks efficiently', category: 'Productivity' },
-  { id: '5', name: 'Calendar', icon: '📅', description: 'Schedule your activities', category: 'Planning' },
-  { id: '6', name: 'Study Material', icon: '📚', description: 'Access study resources', category: 'Education' },
+  { 
+    id: 'puzzle-1', 
+    name: 'Kids Sudoku', 
+    icon: '🧩', 
+    description: 'Fun number placement puzzle', 
+    category: 'Puzzles',
+    path: '/puzzles/sudoku'
+  },
+  { 
+    id: 'puzzle-2', 
+    name: 'Crossword Fun', 
+    icon: '🔠', 
+    description: 'Word discovery game', 
+    category: 'Puzzles',
+    path: '/puzzles/crossword'
+  },
+  { 
+    id: 'puzzle-3', 
+    name: 'Number Maze', 
+    icon: '🏰', 
+    description: 'Navigate through numerical challenges', 
+    category: 'Puzzles',
+    path: '/puzzles/numbermaze'
+  },
+  { 
+    id: 'puzzle-4', 
+    name: 'Math Combination', 
+    icon: '🧮', 
+    description: 'Combine numbers to reach the target', 
+    category: 'Puzzles',
+    path: '/puzzles/math-combination'
+  },
+  { 
+    id: 'puzzle-6', 
+    name: 'Math Path Finder', 
+    icon: '🛤️', 
+    description: 'Connect numbers and operators to reach target', 
+    category: 'Puzzles',
+    path: '/puzzles/math-path'
+  },
+  { 
+    id: 'puzzle-7', 
+    name: 'Magic Square', 
+    icon: '🧙', 
+    description: 'Arrange numbers to match row/column sums', 
+    category: 'Puzzles',
+    path: '/puzzles/magic-square'
+  },
+  { 
+    id: 'puzzle-prime-hunt', 
+    name: 'Prime Hunt', 
+    icon: '🔢', 
+    description: 'Find prime numbers against the clock', 
+    category: 'Puzzles',
+    path: '/puzzles/prime-hunt'
+  },
+  { 
+    id: 'puzzle-equation-balancer', 
+    name: 'Equation Balancer', 
+    icon: '⚖️', 
+    description: 'Balance chemical equations through coefficients', 
+    category: 'Puzzles',
+    path: '/puzzles/equation-balancer'
+  },
 ];
 
 const AppGrid = ({ 
@@ -45,34 +104,10 @@ const AppGrid = ({
       <h2 className={`text-xl font-semibold mb-4 ${currentTheme.textColor}`}>{title}</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {apps.map((app) => (
-          <div
-            key={app.id}
-            className={`${currentTheme.componentBg} p-4 rounded-lg border ${currentTheme.borderColor} hover:border-blue-500 transition-colors duration-200`}
-          >
-            <div className="flex items-start gap-3">
-              <div className="text-2xl">{app.icon}</div>
-              <div className="flex-1">
-                <h3 className={`font-semibold ${currentTheme.textColor}`}>{app.name}</h3>
-                <p className="text-sm text-gray-500">{app.description}</p>
-                <div className="flex items-center justify-between mt-2">
-                  <span className={`inline-block text-xs px-2 py-1 rounded-full ${currentTheme.componentBg} border ${currentTheme.borderColor}`}>
-                    {app.category}
-                  </span>
-                  {showAddButton && !installedApps.has(app.id) && (
-                    <button
-                      onClick={() => onAddApp?.(app)}
-                      className="text-sm px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-                    >
-                      Add App
-                    </button>
-                  )}
-                  {installedApps.has(app.id) && (
-                    <span className="text-sm text-green-500">Installed</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <AppCard 
+            key={app.id} 
+            app={app} 
+          />
         ))}
       </div>
     </div>
@@ -82,25 +117,35 @@ const AppGrid = ({
 export default function HomePage() {
   const { currentTheme } = useTheme();
   const { activeView } = useSidebar();
-  const [myApps, setMyApps] = useState<App[]>([]);
-  const [installedAppIds, setInstalledAppIds] = useState<Set<string>>(new Set());
+  const [addedAppIds, setAddedAppIds] = useState<string[]>([]);
 
   useEffect(() => {
-    // Load installed apps from localStorage
-    const savedApps = localStorage.getItem('myApps');
-    if (savedApps) {
-      const apps = JSON.parse(savedApps);
-      setMyApps(apps);
-      setInstalledAppIds(new Set(apps.map((app: App) => app.id)));
-    }
+    const saved = localStorage.getItem('addedAppIds');
+    if (saved) setAddedAppIds(JSON.parse(saved));
   }, []);
 
-  const handleAddApp = (app: App) => {
-    const updatedApps = [...myApps, app];
-    setMyApps(updatedApps);
-    setInstalledAppIds(new Set([...installedAppIds, app.id]));
-    localStorage.setItem('myApps', JSON.stringify(updatedApps));
+  useEffect(() => {
+    localStorage.setItem('addedAppIds', JSON.stringify(addedAppIds));
+  }, [addedAppIds]);
+
+  const handleAddApp = (appId: string) => {
+    setAddedAppIds(prev => {
+      // Prevent duplicates
+      if (!prev.includes(appId)) {
+        const newIds = [...prev, appId];
+        console.log('Adding app:', appId, 'New state:', newIds);
+        return newIds;
+      }
+      console.log('App already added:', appId);
+      return prev;
+    });
   };
+
+  const handleRemoveApp = (appId: string) => {
+    setAddedAppIds(prev => prev.filter(id => id !== appId));
+  };
+
+  console.log('Added Apps:', addedAppIds);
 
   const getBreadcrumbItems = () => {
     const items = [{ label: 'Home', path: '/' }];
@@ -112,9 +157,10 @@ export default function HomePage() {
     return items;
   };
   
+  const myApps = allApps.filter(app => addedAppIds.includes(app.id));
+
   return (
     <div className={`flex flex-col min-h-screen ${currentTheme.mainBg} transition-colors duration-200`}>
-      <Header />
       <main className="flex-1 w-full">
         <div className={`max-w-7xl mx-auto px-4 py-6 ${currentTheme.textColor}`}>
           <div className="flex gap-6">
@@ -133,30 +179,53 @@ export default function HomePage() {
                     <AppGrid 
                       apps={myApps} 
                       title="My Apps" 
-                      installedApps={installedAppIds}
                     />
                   )}
                   
-                  <AppGrid 
-                    apps={allApps} 
-                    title="All Apps" 
-                    onAddApp={handleAddApp}
-                    showAddButton={true}
-                    installedApps={installedAppIds}
-                  />
+                  <section className="mb-12">
+                    <div className="flex justify-between items-center mb-6">
+                    </div>
+                    <AppGrid 
+                      apps={allApps} 
+                      title="All Apps" 
+                    />
+                  </section>
                 </>
               ) : (
-                <AppGrid 
-                  apps={myApps} 
-                  title="My Installed Apps" 
-                  installedApps={installedAppIds}
-                />
+                <section className="mb-12">
+                  <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-3xl font-bold">⭐ My Apps</h2>
+                    {myApps.length > 0 && (
+                      <button
+                        onClick={() => setAddedAppIds([])}
+                        className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 text-sm"
+                      >
+                        Remove All
+                      </button>
+                    )}
+                  </div>
+                  {myApps.length > 0 ? (
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {myApps.map((app) => (
+                        <AppCard 
+                          key={app.id} 
+                          app={app} 
+                          onRemove={handleRemoveApp}
+                          isAdded={true}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-center py-12 bg-gray-50 rounded-xl">
+                      <p className="text-gray-500">No apps added yet. Browse below!</p>
+                    </div>
+                  )}
+                </section>
               )}
             </div>
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 }

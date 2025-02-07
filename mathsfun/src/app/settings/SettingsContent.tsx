@@ -10,6 +10,55 @@ interface UserProfile {
   bio: string;
 }
 
+type Theme = {
+  name: string;
+  colors: {
+    primary: string;
+    background: string;
+    secondary: string;
+    text: string;
+  };
+};
+
+const themeOptions: Theme[] = [
+  { 
+    name: 'Light',
+    colors: {
+      primary: '#3b82f6',
+      background: '#f8fafc',
+      secondary: '#e2e8f0',
+      text: '#1e293b'
+    }
+  },
+  {
+    name: 'Dark',
+    colors: {
+      primary: '#60a5fa',
+      background: '#1e293b',
+      secondary: '#334155',
+      text: '#f8fafc'
+    }
+  },
+  {
+    name: 'Ocean',
+    colors: {
+      primary: '#06b6d4',
+      background: '#ecfeff',
+      secondary: '#a5f3fc',
+      text: '#164e63'
+    }
+  },
+  {
+    name: 'Sunset',
+    colors: {
+      primary: '#f97316',
+      background: '#fff7ed',
+      secondary: '#fed7aa',
+      text: '#9a3412'
+    }
+  }
+];
+
 export default function SettingsContent() {
   const [activeTab, setActiveTab] = useState('profile');
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
@@ -19,12 +68,21 @@ export default function SettingsContent() {
     email: '',
     bio: ''
   });
+  const [selectedTheme, setSelectedTheme] = useState<Theme>(themeOptions[0]);
 
   useEffect(() => {
     // Load user profile from localStorage
     const savedProfile = localStorage.getItem('userProfile');
     if (savedProfile) {
       setUserProfile(JSON.parse(savedProfile));
+    }
+  }, []);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      const theme = themeOptions.find(t => t.name === savedTheme) || themeOptions[0];
+      applyTheme(theme);
     }
   }, []);
 
@@ -42,6 +100,21 @@ export default function SettingsContent() {
       ...prev,
       [field]: value
     }));
+  };
+
+  const applyTheme = (theme: Theme) => {
+    const root = document.documentElement;
+    root.style.setProperty('--primary', theme.colors.primary);
+    root.style.setProperty('--background', theme.colors.background);
+    root.style.setProperty('--secondary', theme.colors.secondary);
+    root.style.setProperty('--text', theme.colors.text);
+    localStorage.setItem('theme', theme.name);
+  };
+
+  const handleThemeChange = (themeName: string) => {
+    const theme = themeOptions.find(t => t.name === themeName) || themeOptions[0];
+    setSelectedTheme(theme);
+    applyTheme(theme);
   };
 
   const tabContent = {
@@ -109,25 +182,34 @@ export default function SettingsContent() {
     appearance: (
       <div className="space-y-6">
         <div>
-          <h3 className={`text-lg font-medium ${currentTheme.textColor}`}>Theme</h3>
+          <h2 className="text-2xl font-bold">Theme Settings</h2>
           <p className="text-sm text-gray-500 mb-4">Select your preferred theme.</p>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {themes.map((theme) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {themeOptions.map(theme => (
               <button
-                key={theme.id}
-                onClick={() => changeTheme(theme.id)}
-                className={`p-4 rounded-lg border ${
-                  currentTheme.id === theme.id
-                    ? 'border-blue-500 ring-2 ring-blue-500'
-                    : currentTheme.borderColor
-                } ${currentTheme.componentBg} transition-all hover:border-blue-500`}
+                key={theme.name}
+                onClick={() => handleThemeChange(theme.name)}
+                className={`p-4 rounded-lg border-2 ${
+                  selectedTheme.name === theme.name 
+                    ? 'border-[var(--primary)] ring-2 ring-[var(--primary)]' 
+                    : 'border-gray-200'
+                } transition-all`}
+                style={{
+                  backgroundColor: theme.colors.background,
+                  color: theme.colors.text
+                }}
               >
-                <div className="flex items-center justify-between">
-                  <span className={`text-sm font-medium ${currentTheme.textColor}`}>{theme.name}</span>
-                  {currentTheme.id === theme.id && (
-                    <CheckCircle className="h-5 w-5 text-blue-500" />
-                  )}
+                <div className="space-y-2">
+                  <div 
+                    className="w-full h-16 rounded-md"
+                    style={{ backgroundColor: theme.colors.primary }}
+                  />
+                  <div 
+                    className="w-full h-8 rounded-md"
+                    style={{ backgroundColor: theme.colors.secondary }}
+                  />
                 </div>
+                <span className="mt-2 block font-medium">{theme.name}</span>
               </button>
             ))}
           </div>
@@ -137,7 +219,7 @@ export default function SettingsContent() {
   };
 
   return (
-    <div className={`${currentTheme.componentBg} rounded-lg border ${currentTheme.borderColor} overflow-hidden`}>
+    <div className="p-6 space-y-6 bg-white rounded-xl shadow-sm">
       {/* Tabs */}
       <div className="flex border-b border-gray-200">
         <button
