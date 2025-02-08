@@ -17,96 +17,96 @@ interface App {
 }
 
 const allApps: App[] = [
-  { 
-    id: 'puzzle-1', 
-    name: 'Kids Sudoku', 
-    icon: '🧩', 
-    description: 'Fun number placement puzzle', 
+  {
+    id: 'puzzle-1',
+    name: 'Kids Sudoku',
+    icon: '🧩',
+    description: 'Fun number placement puzzle',
     category: 'Puzzles',
     path: '/puzzles/sudoku'
   },
-  { 
-    id: 'puzzle-2', 
-    name: 'Crossword Fun', 
-    icon: '🔠', 
-    description: 'Word discovery game', 
+  {
+    id: 'puzzle-2',
+    name: 'Crossword Fun',
+    icon: '🔠',
+    description: 'Word discovery game',
     category: 'Puzzles',
     path: '/puzzles/crossword'
   },
-  { 
-    id: 'puzzle-3', 
-    name: 'Number Maze', 
-    icon: '🏰', 
-    description: 'Navigate through numerical challenges', 
+  {
+    id: 'puzzle-3',
+    name: 'Number Maze',
+    icon: '🏰',
+    description: 'Navigate through numerical challenges',
     category: 'Puzzles',
     path: '/puzzles/numbermaze'
   },
-  { 
-    id: 'puzzle-4', 
-    name: 'Math Combination', 
-    icon: '🧮', 
-    description: 'Combine numbers to reach the target', 
+  {
+    id: 'puzzle-4',
+    name: 'Math Combination',
+    icon: '🧮',
+    description: 'Combine numbers to reach the target',
     category: 'Puzzles',
     path: '/puzzles/math-combination'
   },
-  { 
-    id: 'puzzle-6', 
-    name: 'Math Path Finder', 
-    icon: '🛤️', 
-    description: 'Connect numbers and operators to reach target', 
+  {
+    id: 'puzzle-6',
+    name: 'Math Path Finder',
+    icon: '🛤️',
+    description: 'Connect numbers and operators to reach target',
     category: 'Puzzles',
     path: '/puzzles/math-path'
   },
-  { 
-    id: 'puzzle-7', 
-    name: 'Magic Square', 
-    icon: '🧙', 
-    description: 'Arrange numbers to match row/column sums', 
+  {
+    id: 'puzzle-7',
+    name: 'Magic Square',
+    icon: '🧙',
+    description: 'Arrange numbers to match row/column sums',
     category: 'Puzzles',
     path: '/puzzles/magic-square'
   },
-  { 
-    id: 'puzzle-prime-hunt', 
-    name: 'Prime Hunt', 
-    icon: '🔢', 
-    description: 'Find prime numbers against the clock', 
+  {
+    id: 'puzzle-prime-hunt',
+    name: 'Prime Hunt',
+    icon: '🔢',
+    description: 'Find prime numbers against the clock',
     category: 'Puzzles',
     path: '/puzzles/prime-hunt'
   },
-  { 
-    id: 'puzzle-equation-balancer', 
-    name: 'Equation Balancer', 
-    icon: '⚖️', 
-    description: 'Balance chemical equations through coefficients', 
+  {
+    id: 'puzzle-equation-balancer',
+    name: 'Equation Balancer',
+    icon: '⚖️',
+    description: 'Balance chemical equations through coefficients',
     category: 'Puzzles',
     path: '/puzzles/equation-balancer'
   },
-  { 
-    id: 'puzzle-fibonacci', 
-    name: 'Fibonacci Quest', 
-    icon: '🔢', 
-    description: 'Complete Fibonacci sequences', 
+  {
+    id: 'puzzle-fibonacci',
+    name: 'Fibonacci Quest',
+    icon: '🔢',
+    description: 'Complete Fibonacci sequences',
     category: 'Number-Based Puzzles',
     path: '/puzzles/fibonacci-quest'
   },
-  { 
-    id: 'puzzle-number-sequence', 
-    name: 'Number Sequence', 
-    icon: '🔣', 
-    description: 'Identify the next number in patterns', 
+  {
+    id: 'puzzle-number-sequence',
+    name: 'Number Sequence',
+    icon: '🔣',
+    description: 'Identify the next number in patterns',
     category: 'Number-Based Puzzles',
     path: '/puzzles/number-sequence'
   },
 ];
 
-const AppGrid = ({ 
-  apps, 
-  title, 
-  onAddApp, 
+const AppGrid = ({
+  apps,
+  title,
+  onAddApp,
   showAddButton = false,
   installedApps = new Set()
-}: { 
-  apps: App[], 
+}: {
+  apps: App[],
   title: string,
   onAddApp?: (app: App) => void,
   showAddButton?: boolean,
@@ -114,16 +114,19 @@ const AppGrid = ({
 }) => {
   return (
     <div className="mb-8">
-      <h2 
+      <h2
         className="text-xl font-semibold mb-4"
       >
         {title}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {apps.map((app) => (
-          <AppCard 
-            key={app.id} 
-            app={app} 
+          <AppCard
+            key={app.id}
+            title={app.name}
+            description={app.description}
+            href={app.path}
+            icon={app.icon}
           />
         ))}
       </div>
@@ -172,7 +175,7 @@ const Home = () => {
     }
     return items;
   };
-  
+
   const myApps = allApps.filter(app => addedAppIds.includes(app.id));
 
   return (
@@ -190,22 +193,22 @@ const Home = () => {
                     {activeView === 'dashboard' ? 'Dashboard' : 'My Apps'}
                   </h1>
                 </div>
-                
+
                 {activeView === 'dashboard' ? (
                   <>
                     {myApps.length > 0 && (
-                      <AppGrid 
-                        apps={myApps} 
-                        title="My Apps" 
+                      <AppGrid
+                        apps={myApps}
+                        title="My Apps"
                       />
                     )}
-                    
+
                     <section className="mb-12">
                       <div className="flex justify-between items-center mb-6">
                       </div>
-                      <AppGrid 
-                        apps={allApps} 
-                        title="All Apps" 
+                      <AppGrid
+                        apps={allApps}
+                        title="All Apps"
                       />
                     </section>
                   </>
@@ -225,9 +228,12 @@ const Home = () => {
                     {myApps.length > 0 ? (
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {myApps.map((app) => (
-                          <AppCard 
-                            key={app.id} 
-                            app={app} 
+                          <AppCard
+                            key={app.id}
+                            title={app.name}
+                            description={app.description}
+                            href={app.path}
+                            icon={app.icon}
                             onRemove={handleRemoveApp}
                             isAdded={true}
                           />

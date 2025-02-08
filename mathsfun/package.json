@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@formspree/react": "^2.5.1",
+    "@heroicons/react": "^2.2.0",
     "@next/font": "^14.2.15",
+    "@phosphor-icons/react": "^2.1.7",
     "@reduxjs/toolkit": "^2.5.1",
     "@types/howler": "^2.2.12",
     "clsx": "^2.1.1",
