@@ -3,6 +3,9 @@
 import { useState, useEffect } from 'react';
 import { User, Mail, Lock, Bell, Shield, Palette, Save, CheckCircle, Sun } from 'lucide-react';
 import { useTheme, themes } from '../../context/ThemeContext';
+import Snack from '@/components/Snack';
+import Loader from '@/components/Loader';
+import { cn } from '@/lib/utils';
 
 interface UserProfile {
   fullName: string;
@@ -17,6 +20,7 @@ type Theme = {
     background: string;
     secondary: string;
     text: string;
+    componentBg: string;
   };
 };
 
@@ -27,7 +31,8 @@ const themeOptions: Theme[] = [
       primary: '#3b82f6',
       background: '#f8fafc',
       secondary: '#e2e8f0',
-      text: '#1e293b'
+      text: '#1e293b',
+      componentBg: '#f8fafc'
     }
   },
   {
@@ -36,7 +41,8 @@ const themeOptions: Theme[] = [
       primary: '#60a5fa',
       background: '#1e293b',
       secondary: '#334155',
-      text: '#f8fafc'
+      text: '#f8fafc',
+      componentBg: '#1e293b'
     }
   },
   {
@@ -45,7 +51,8 @@ const themeOptions: Theme[] = [
       primary: '#06b6d4',
       background: '#ecfeff',
       secondary: '#a5f3fc',
-      text: '#164e63'
+      text: '#164e63',
+      componentBg: '#ecfeff'
     }
   },
   {
@@ -54,7 +61,8 @@ const themeOptions: Theme[] = [
       primary: '#f97316',
       background: '#fff7ed',
       secondary: '#fed7aa',
-      text: '#9a3412'
+      text: '#9a3412',
+      componentBg: '#fff7ed'
     }
   }
 ];
@@ -62,13 +70,23 @@ const themeOptions: Theme[] = [
 export default function SettingsContent() {
   const [activeTab, setActiveTab] = useState('profile');
   const [showSaveSuccess, setShowSaveSuccess] = useState(false);
-  const { currentTheme, changeTheme } = useTheme();
   const [userProfile, setUserProfile] = useState<UserProfile>({
     fullName: '',
     email: '',
     bio: ''
   });
-  const [selectedTheme, setSelectedTheme] = useState<Theme>(themeOptions[0]);
+  const [snackState, setSnackState] = useState<{
+    visible: boolean;
+    type: 'success' | 'error';
+    message: string;
+  }>({
+    visible: false,
+    type: 'success',
+    message: ''
+  });
+  const [isSaving, setIsSaving] = useState(false);
+  const [showSnack, setShowSnack] = useState(false);
+  const [isDirty, setIsDirty] = useState(false);
 
   useEffect(() => {
     // Load user profile from localStorage
@@ -78,79 +96,92 @@ export default function SettingsContent() {
     }
   }, []);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) {
-      const theme = themeOptions.find(t => t.name === savedTheme) || themeOptions[0];
-      applyTheme(theme);
-    }
-  }, []);
+  
 
-  const handleSave = () => {
-    // Save to localStorage
-    localStorage.setItem('userProfile', JSON.stringify(userProfile));
-    
-    // Show success message
-    setShowSaveSuccess(true);
-    setTimeout(() => setShowSaveSuccess(false), 3000);
+  const handleSave = async () => {
+    try {
+      setIsSaving(true);
+      
+      if (!userProfile.fullName.trim()) {
+        setSnackState({
+          visible: true,
+          type: 'error',
+          message: 'Please fill the required name field'
+        });
+        return;
+      }
+
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      localStorage.setItem('userProfile', JSON.stringify(userProfile));
+      
+      setSnackState({
+        visible: true,
+        type: 'success',
+        message: 'Settings saved successfully!'
+      });
+    } catch (error) {
+      setSnackState({
+        visible: true,
+        type: 'error',
+        message: 'Failed to save settings'
+      });
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleInputChange = (field: keyof UserProfile, value: string) => {
+    setIsDirty(true);
     setUserProfile(prev => ({
       ...prev,
       [field]: value
     }));
   };
 
-  const applyTheme = (theme: Theme) => {
-    const root = document.documentElement;
-    root.style.setProperty('--primary', theme.colors.primary);
-    root.style.setProperty('--background', theme.colors.background);
-    root.style.setProperty('--secondary', theme.colors.secondary);
-    root.style.setProperty('--text', theme.colors.text);
-    localStorage.setItem('theme', theme.name);
+  const isNameValid = () => {
+    return userProfile.fullName.trim().length > 0;
   };
 
-  const handleThemeChange = (themeName: string) => {
-    const theme = themeOptions.find(t => t.name === themeName) || themeOptions[0];
-    setSelectedTheme(theme);
-    applyTheme(theme);
-  };
+ 
+  
 
   const tabContent = {
     profile: (
       <div className="space-y-6">
         <div>
-          <label className={`block text-sm font-medium ${currentTheme.textColor}`}>
-            Full Name
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Full Name<span className="text-red-500 ml-1">*</span>
           </label>
-          <input
-            type="text"
-            value={userProfile.fullName}
-            onChange={(e) => handleInputChange('fullName', e.target.value)}
-            className={`mt-1 block w-full rounded-md border ${currentTheme.borderColor} ${currentTheme.componentBg} p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm`}
-          />
+          <div className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg border border-gray-200">
+            <User className="h-5 w-5 text-gray-400" />
+            <input
+              value={userProfile.fullName}
+              onChange={(e) => handleInputChange('fullName', e.target.value)}
+              className="flex-1 bg-transparent focus:outline-none"
+              placeholder="John Doe"
+            />
+          </div>
         </div>
         <div>
-          <label className={`block text-sm font-medium ${currentTheme.textColor}`}>
-            Email
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Email Address
           </label>
           <input
             type="email"
             value={userProfile.email}
             onChange={(e) => handleInputChange('email', e.target.value)}
-            className={`mt-1 block w-full rounded-md border ${currentTheme.borderColor} ${currentTheme.componentBg} p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm`}
+            className={`mt-1 block w-full rounded-md border p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm`}
           />
         </div>
         <div>
-          <label className={`block text-sm font-medium ${currentTheme.textColor}`}>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Bio
           </label>
           <textarea
             value={userProfile.bio}
             onChange={(e) => handleInputChange('bio', e.target.value)}
             rows={4}
-            className={`mt-1 block w-full rounded-md border ${currentTheme.borderColor} ${currentTheme.componentBg} p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm`}
+            className={`mt-1 block w-full rounded-md border  p-2 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm`}
           />
         </div>
       </div>
@@ -158,11 +189,11 @@ export default function SettingsContent() {
     account: (
       <div className="space-y-6">
         <div>
-          <h3 className={`text-lg font-medium ${currentTheme.textColor}`}>Password</h3>
+          <h3 className={`text-lg font-medium `}>Password</h3>
           <p className="text-sm text-gray-500">Update your password or enable two-factor authentication.</p>
         </div>
         <div>
-          <h3 className={`text-lg font-medium ${currentTheme.textColor}`}>Connected Accounts</h3>
+          <h3 className={`text-lg font-medium `}>Connected Accounts</h3>
           <p className="text-sm text-gray-500">Connect your accounts to enable single sign-on.</p>
         </div>
       </div>
@@ -170,11 +201,11 @@ export default function SettingsContent() {
     notifications: (
       <div className="space-y-6">
         <div>
-          <h3 className={`text-lg font-medium ${currentTheme.textColor}`}>Email Notifications</h3>
+          <h3 className={`text-lg font-medium `}>Email Notifications</h3>
           <p className="text-sm text-gray-500">Choose what updates you want to receive.</p>
         </div>
         <div>
-          <h3 className={`text-lg font-medium ${currentTheme.textColor}`}>Push Notifications</h3>
+          <h3 className={`text-lg font-medium `}>Push Notifications</h3>
           <p className="text-sm text-gray-500">Configure your mobile push notifications.</p>
         </div>
       </div>
@@ -185,33 +216,7 @@ export default function SettingsContent() {
           <h2 className="text-2xl font-bold">Theme Settings</h2>
           <p className="text-sm text-gray-500 mb-4">Select your preferred theme.</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {themeOptions.map(theme => (
-              <button
-                key={theme.name}
-                onClick={() => handleThemeChange(theme.name)}
-                className={`p-4 rounded-lg border-2 ${
-                  selectedTheme.name === theme.name 
-                    ? 'border-[var(--primary)] ring-2 ring-[var(--primary)]' 
-                    : 'border-gray-200'
-                } transition-all`}
-                style={{
-                  backgroundColor: theme.colors.background,
-                  color: theme.colors.text
-                }}
-              >
-                <div className="space-y-2">
-                  <div 
-                    className="w-full h-16 rounded-md"
-                    style={{ backgroundColor: theme.colors.primary }}
-                  />
-                  <div 
-                    className="w-full h-8 rounded-md"
-                    style={{ backgroundColor: theme.colors.secondary }}
-                  />
-                </div>
-                <span className="mt-2 block font-medium">{theme.name}</span>
-              </button>
-            ))}
+           
           </div>
         </div>
       </div>
@@ -219,7 +224,11 @@ export default function SettingsContent() {
   };
 
   return (
-    <div className="p-6 space-y-6 bg-white rounded-xl shadow-sm">
+    <div 
+      className="rounded-lg p-6"
+     
+    >
+      <h2 className="text-xl font-semibold mb-4">Appearance</h2>
       {/* Tabs */}
       <div className="flex border-b border-gray-200">
         <button
@@ -277,18 +286,32 @@ export default function SettingsContent() {
       <div className="px-6 py-4 bg-gray-50 flex items-center justify-between">
         <button
           onClick={handleSave}
-          className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          disabled={!isDirty || !isNameValid() || isSaving}
+          className={cn(
+            "flex items-center px-4 py-2 bg-blue-500 text-white rounded-md",
+            "hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500",
+            "focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          )}
         >
-          <Save className="h-5 w-5 mr-2" />
-          Save Changes
+          {isSaving ? (
+            <>
+              <Loader size="sm" color="text-white" className="mr-2" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="h-5 w-5 mr-2" />
+              Save Changes
+            </>
+          )}
         </button>
         
-        {/* Success Message */}
-        {showSaveSuccess && (
-          <div className="flex items-center text-green-500">
-            <CheckCircle className="h-5 w-5 mr-2" />
-            <span>Changes saved successfully!</span>
-          </div>
+        {snackState.visible && (
+          <Snack
+            type={snackState.type}
+            message={snackState.message}
+            onClose={() => setSnackState(prev => ({...prev, visible: false}))}
+          />
         )}
       </div>
     </div>

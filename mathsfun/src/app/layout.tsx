@@ -26,31 +26,33 @@ const comicNeue = Comic_Neue({
 
 // Metadata needs to be in a separate file for app router
 export const metadata: Metadata = {
-  title: "MathsFun - Learning Games",
-  description: "Fun educational games for kids",
+  title: 'maths4fun - Interactive Math Learning',
+  description: 'Learn math through fun interactive games and puzzles',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} ${comicNeue.variable} antialiased font-sans flex flex-col min-h-screen`}>
-        <ReduxProvider>
-          <UserProvider>
-            <Header />
-            <main className="flex-1">
-              <Providers>
-                <div className="min-h-screen">
-                  {children}
-                </div>
-              </Providers>
-            </main>
-            <Footer />
-          </UserProvider>
-        </ReduxProvider>
+    <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link
+          rel="icon"
+          href="/maths4fun.png"
+          type="image/png"
+          sizes="512x512"
+        />
+      </head>
+      <body className="bg-yellow-50">
+        <Header />
+        <main className="min-h-screen">{children}</main>
+        <Footer />
       </body>
     </html>
   );

@@ -2,7 +2,6 @@
 
 import Sidebar from "../../components/Sidebar";
 import Breadcrumb from "../../components/Breadcrumb";
-import { useTheme } from "../../context/ThemeContext";
 import { Mail, MessageCircle, Phone, FileText, Plus, Minus, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
@@ -50,7 +49,6 @@ const resources = [
 ];
 
 export default function HelpPage() {
-  const { currentTheme } = useTheme();
   const [openFAQs, setOpenFAQs] = useState<number[]>([]);
   
   const breadcrumbItems = [
@@ -67,7 +65,9 @@ export default function HelpPage() {
   };
 
   return (
-    <div className={`flex flex-col min-h-screen ${currentTheme.mainBg}`}>
+    <div 
+      className="p-8 min-h-screen"
+    >
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
@@ -75,7 +75,7 @@ export default function HelpPage() {
             <div className="flex-1">
               <div className="mb-8">
                 <Breadcrumb items={breadcrumbItems} />
-                <h1 className={`text-2xl font-bold ${currentTheme.textColor}`}>Help & Support</h1>
+                <h1 className={`text-2xl font-bold`}>Help & Support</h1>
               </div>
 
               {/* Quick Resources */}
@@ -86,10 +86,10 @@ export default function HelpPage() {
                     <a
                       key={index}
                       href={resource.link}
-                      className={`${currentTheme.componentBg} p-4 rounded-lg border ${currentTheme.borderColor} hover:shadow-md transition-all duration-200 flex flex-col items-center text-center`}
+                      className={` p-4 rounded-lg border hover:shadow-md transition-all duration-200 flex flex-col items-center text-center`}
                     >
-                      <Icon className={`h-8 w-8 mb-2 ${currentTheme.textColor}`} />
-                      <h3 className={`font-semibold ${currentTheme.textColor}`}>{resource.title}</h3>
+                      <Icon className={`h-8 w-8 mb-2 `} />
+                      <h3 className={`font-semibold `}>{resource.title}</h3>
                       <p className="text-sm text-gray-600">{resource.description}</p>
                       <ExternalLink className="h-4 w-4 mt-2 text-gray-400" />
                     </a>
@@ -98,8 +98,8 @@ export default function HelpPage() {
               </div>
 
               {/* FAQs */}
-              <div className={`${currentTheme.componentBg} rounded-lg border ${currentTheme.borderColor} p-6`}>
-                <h2 className={`text-xl font-semibold mb-4 ${currentTheme.textColor}`}>
+              <div className={` rounded-lg border  p-6`}>
+                <h2 className={`text-xl font-semibold mb-4 `}>
                   Frequently Asked Questions
                 </h2>
                 <div className="space-y-4">
@@ -107,7 +107,7 @@ export default function HelpPage() {
                     <div key={index} className="border-b last:border-b-0">
                       <button
                         onClick={() => toggleFAQ(index)}
-                        className={`w-full flex items-center justify-between py-4 ${currentTheme.textColor}`}
+                        className={`w-full flex items-center justify-between py-4 `}
                       >
                         <span className="font-medium text-left">{faq.question}</span>
                         {openFAQs.includes(index) ? (

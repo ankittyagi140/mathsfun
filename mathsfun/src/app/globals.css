@@ -23,17 +23,12 @@ body {
 }
 
 /* Update header component to use theme colors */
-header {
-  background-color: var(--primary) !important;
-  color: white !important;
-}
+
 
 .btn-primary {
-  background-color: var(--primary);
-  color: white;
+  @apply bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500;
 }
 
 .btn-secondary {
-  background-color: var(--secondary);
-  color: var(--text);
+  @apply bg-yellow-100 text-yellow-700 hover:bg-yellow-200 focus:ring-yellow-500;
 }

@@ -2,7 +2,7 @@ import GameCard from '../../components/GameCard';
 
 export default function PuzzlesPage() {
   return (
-    <div className="min-h-screen p-8 bg-gray-50">
+    <div className="bg-yellow-50 min-h-screen">
       <h1 className="text-4xl font-bold text-center mb-8 text-blue-600">
         🎮 All Math Games
       </h1>
