@@ -7,6 +7,8 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { UserProvider } from '../context/UserContext';
 import { ReduxProvider } from '../providers/ReduxProvider';
+import { Lilita_One, Luckiest_Guy, Fredoka } from 'next/font/google';
+import './fonts.css';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +34,13 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
   },
 };
+
+// Choose one of these fonts:
+const headingFont = Luckiest_Guy({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export default function RootLayout({
   children,

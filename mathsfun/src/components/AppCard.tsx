@@ -2,76 +2,36 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 interface AppCardProps {
-  app: App;
-  onAdd?: (appId: string) => void;
-  onRemove?: (appId: string) => void;
-  isAdded?: boolean;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  href: string;
 }
 
-const AppCard = ({ app, onAdd, onRemove, isAdded }: AppCardProps) => {
-  const [isJustAdded, setIsJustAdded] = useState(false);
-
-  const handleAddClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onAdd?.(app.id);
-    setIsJustAdded(true);
-    setTimeout(() => setIsJustAdded(false), 1000);
-  };
-
-  const handleRemoveClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    onRemove?.(app.id);
-  };
-
+export default function AppCard({ title, description, icon, href }: AppCardProps) {
   return (
-    <div className={`relative bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition-shadow h-full
-      ${isJustAdded ? 'animate-pulse ring-2 ring-blue-200' : ''}
-    `}>
-      <div className="absolute top-2 right-2 z-10">
-        {onRemove ? (
-          <button
-            onClick={handleRemoveClick}
-            className="text-red-500 hover:text-red-600 transition-colors px-2 py-1 rounded"
-          >
-            Remove
-          </button>
-        ) : (
-          <button
-            onClick={handleAddClick}
-            className={`${
-              isAdded 
-                ? 'bg-gray-100 text-gray-400 cursor-not-allowed' 
-                : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-            } px-3 py-1 rounded-full text-sm transition-colors`}
-            disabled={isAdded}
-          >
-            {isAdded ? 'Added' : 'Add'}
-          </button>
-        )}
+    <Link
+      href={href}
+      className="group relative bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 ease-out border border-gray-100 overflow-hidden"
+    >
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-50 to-purple-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      
+      <div className="relative p-6 space-y-4">
+        <div className="w-12 h-12 flex items-center justify-center rounded-lg bg-blue-100 text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+          {icon}
+        </div>
+        
+        <div>
+          <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+            {title}
+          </h3>
+          <p className="text-sm text-gray-600 mt-1 leading-relaxed">
+            {description}
+          </p>
+        </div>
       </div>
       
-      <Link 
-        href={app.path} 
-        className="flex items-start gap-4"
-        onClick={(e) => {
-          if ((e.target as HTMLElement).closest('button')) {
-            e.preventDefault();
-          }
-        }}
-      >
-        <span className="text-3xl">{app.icon}</span>
-        <div>
-          <h2 className="text-xl font-bold mb-2">{app.name}</h2>
-          <p className="text-gray-600">{app.description}</p>
-          <div className="mt-2 text-sm text-gray-500">
-            Category: {app.category}
-          </div>
-        </div>
-      </Link>
-    </div>
+      <div className="absolute bottom-0 left-0 right-0 h-1 bg-blue-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+    </Link>
   );
-};
-
-export default AppCard; 
+} 

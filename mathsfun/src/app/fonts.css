@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'Comic Neue';
+  src: url('/fonts/ComicNeue-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+} 
