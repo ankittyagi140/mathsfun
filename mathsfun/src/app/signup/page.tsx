@@ -3,29 +3,40 @@ import { useState } from 'react';
 import { auth } from '@/lib/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import Loader from '@/components/Loader';
+import Snack from '@/components/Snack';
 
 export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const router = useRouter();
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
-      return;
-    }
+    setIsLoading(true);
+    setError('');
+    setSnack(null);
+
     try {
       await createUserWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      setError('Error creating account. Please try again.');
+      setSnack({ message: 'Account created successfully!', type: 'success' });
+      router.push('/login');
+    } catch (err: any) {
+      setError(err.message || 'Signup failed');
+      setSnack({ message: 'Failed to create account', type: 'error' });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">Create Account 🎉</h1>
+        <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">Create Account 🚀</h1>
         
         {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
 
@@ -49,15 +60,22 @@ export default function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
               required
-              minLength={6}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors"
+            disabled={isLoading}
+            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
           >
-            Sign Up
+            {isLoading ? (
+              <>
+                <Loader className="h-5 w-5" />
+                Creating Account...
+              </>
+            ) : (
+              'Sign Up'
+            )}
           </button>
         </form>
 
@@ -67,6 +85,14 @@ export default function SignupPage() {
             Login here
           </Link>
         </p>
+
+        {snack && (
+          <Snack
+            message={snack.message}
+            type={snack.type}
+            onClose={() => setSnack(null)}
+          />
+        )}
       </div>
     </div>
   );

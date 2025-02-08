@@ -66,7 +66,7 @@ const allApps: App[] = [
     path: '/puzzles/magic-square'
   },
   {
-    id: 'puzzle-prime-hunt',
+    id: 'puzzle-8',
     name: 'Prime Hunt',
     icon: '🔢',
     description: 'Find prime numbers against the clock',
@@ -74,7 +74,7 @@ const allApps: App[] = [
     path: '/puzzles/prime-hunt'
   },
   {
-    id: 'puzzle-equation-balancer',
+    id: 'puzzle-9',
     name: 'Equation Balancer',
     icon: '⚖️',
     description: 'Balance chemical equations through coefficients',
@@ -82,7 +82,7 @@ const allApps: App[] = [
     path: '/puzzles/equation-balancer'
   },
   {
-    id: 'puzzle-fibonacci',
+    id: 'puzzle-10',
     name: 'Fibonacci Quest',
     icon: '🔢',
     description: 'Complete Fibonacci sequences',
@@ -90,7 +90,7 @@ const allApps: App[] = [
     path: '/puzzles/fibonacci-quest'
   },
   {
-    id: 'puzzle-number-sequence',
+    id: 'puzzle-11',
     name: 'Number Sequence',
     icon: '🔣',
     description: 'Identify the next number in patterns',
@@ -127,6 +127,7 @@ const AppGrid = ({
             description={app.description}
             href={app.path}
             icon={app.icon}
+            id={app.id}
           />
         ))}
       </div>

@@ -96,9 +96,10 @@ export default function AchievementsPage() {
 
   return (
     <div 
-      className="p-8 min-h-screen"
+      className="min-h-screen p-8 bg-white"
     >
-      <h1 className="text-2xl font-bold mb-6">Your Achievements</h1>
+      <main className="flex-1 w-full">
+      <div className="max-w-7xl mx-auto px-4 py-6">
       <div className="flex gap-6">
         <Sidebar />
         <div className="flex-1">
@@ -183,7 +184,9 @@ export default function AchievementsPage() {
             })}
           </div>
         </div>
+      </div> 
       </div>
+      </main>
     </div>
   );
 }

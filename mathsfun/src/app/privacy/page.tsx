@@ -45,8 +45,8 @@ export default function PrivacyPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">3. Personal Information</h2>
           <p className="text-gray-600">
-            maths4fun does not collect or solicit any personally identifiable information from children. 
-            There are no contests or chat features on maths4fun.
+            maths2fun does not collect or solicit any personally identifiable information from children. 
+            There are no contests or chat features on maths2fun.
           </p>
         </section>
 
@@ -69,13 +69,13 @@ export default function PrivacyPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">5. Contact Information</h2>
           <p className="text-gray-600 mb-2">
-            All inquiries concerning maths4fun and its policies may be sent to: 
-            <a href="mailto:help@maths4fun.com" className="text-yellow-600 hover:text-yellow-700">
-              help@maths4fun.com
+            All inquiries concerning maths2fun and its policies may be sent to: 
+            <a href="mailto:help@maths2fun.com" className="text-yellow-600 hover:text-yellow-700">
+              help@maths2fun.com
             </a>
           </p>
           <address className="not-italic text-gray-600">
-            Mailing Address: maths4fun LLC,<br />
+            Mailing Address: maths2fun LLC,<br />
             [Your Physical Address Here]<br />
             Phone: [Your Contact Number]
           </address>

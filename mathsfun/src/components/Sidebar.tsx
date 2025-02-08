@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils';
 
 const links = [
   { href: '/', icon: 'dashboard', text: 'Dashboard' },
-  { href: '/?view=myapps', icon: 'myapps', text: 'My Apps', checkQuery: true },
+  { href: '/myapps', icon: 'myapps', text: 'My Apps', checkQuery: true },
   { href: '/achievements', icon: 'achievements', text: 'Achievements' },
   { href: '/settings', icon: 'settings', text: 'Settings' },
   { href: '/help', icon: 'help', text: 'Help & Support' }
@@ -28,7 +28,6 @@ export default function Sidebar() {
   };
 
   const toggleSidebar = () => {
-    console.log('Toggling sidebar');
     toggle();
   };
 

@@ -44,7 +44,7 @@ const resources = [
     title: "Email Support",
     description: "Get help via email",
     icon: Mail,
-    link: "mailto:support@mathsfun.com"
+    link: "mailto:info@maths2fun.com"
   },
 ];
 

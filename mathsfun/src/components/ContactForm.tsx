@@ -12,9 +12,15 @@ type FormData = {
 
 export default function ContactForm() {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-  const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [snack, setSnack] = useState<{ 
+    message: string; 
+    type: 'success' | 'error' 
+  } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = async (data: FormData) => {
+    setSnack(null);
+    setIsSubmitting(true);
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',
@@ -22,18 +28,18 @@ export default function ContactForm() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-      
       if (!response.ok) {
-        throw new Error(result.error || 'Submission failed');
+        throw new Error('Failed to send message');
       }
-      
+
       setSnack({ message: 'Message sent successfully!', type: 'success' });
     } catch (error: any) {
       setSnack({ 
-        message: error.message || 'Failed to send message. Please try again.', 
+        message: 'Failed to send message. Please email us at info@maths2fun.com', 
         type: 'error' 
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -82,10 +88,17 @@ export default function ContactForm() {
 
         <button
           type="submit"
+          disabled={isSubmitting}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-blue-300 flex items-center justify-center gap-2"
         >
-          <Loader2 className="animate-spin h-5 w-5" />
-          Send Message
+          {isSubmitting ? (
+            <>
+              <Loader2 className="animate-spin h-5 w-5" />
+              Sending...
+            </>
+          ) : (
+            'Send Message'
+          )}
         </button>
       </form>
 
