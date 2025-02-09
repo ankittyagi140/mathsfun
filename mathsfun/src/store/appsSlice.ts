@@ -16,7 +16,6 @@ const loadFromLocalStorage = (): App[] => {
     const stored = localStorage.getItem('myApps');
     return stored ? JSON.parse(stored) : [];
   } catch (error) {
-    console.error('LocalStorage parse error:', error);
     return [];
   }
 };

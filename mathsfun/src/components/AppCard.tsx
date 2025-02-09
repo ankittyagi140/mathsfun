@@ -27,7 +27,6 @@ export default function AppCard({ title, description, icon, href, id }: AppCardP
     if (isAdded) {
       dispatch(removeApp(id));
       showSnackbar(`${title} removed from My Apps`, 'success');
-      console.log('Dispatching remove and showing snack');
     } else {
       dispatch(addApp({
         id: id,
@@ -37,7 +36,6 @@ export default function AppCard({ title, description, icon, href, id }: AppCardP
         icon: icon
       }));
       showSnackbar(`${title} added to My Apps`, 'success');
-      console.log('Dispatching add and showing snack');
     }
   };
 

@@ -5,9 +5,8 @@ import { useSidebar } from "../context/Sidebar";
 import Breadcrumb from "../components/Breadcrumb";
 import AppCard from '../components/AppCard';
 import { Search } from 'lucide-react';
-
-import Link from 'next/link';
-
+import {allPuzzleApps} from '../utils/allPuzzleApps';
+import { useRouter } from 'next/navigation';
 interface App {
   id: string;
   name: string;
@@ -17,88 +16,7 @@ interface App {
   path: string;
 }
 
-const allApps: App[] = [
-  {
-    id: 'puzzle-1',
-    name: 'Kids Sudoku',
-    icon: '🧩',
-    description: 'Fun number placement puzzle',
-    category: 'Puzzles',
-    path: '/puzzles/sudoku'
-  },
-  {
-    id: 'puzzle-2',
-    name: 'Crossword Fun',
-    icon: '🔠',
-    description: 'Word discovery game',
-    category: 'Puzzles',
-    path: '/puzzles/crossword'
-  },
-  {
-    id: 'puzzle-3',
-    name: 'Number Maze',
-    icon: '🏰',
-    description: 'Navigate through numerical challenges',
-    category: 'Puzzles',
-    path: '/puzzles/numbermaze'
-  },
-  {
-    id: 'puzzle-4',
-    name: 'Math Combination',
-    icon: '🧮',
-    description: 'Combine numbers to reach the target',
-    category: 'Puzzles',
-    path: '/puzzles/math-combination'
-  },
-  {
-    id: 'puzzle-6',
-    name: 'Math Path Finder',
-    icon: '🛤️',
-    description: 'Connect numbers and operators to reach target',
-    category: 'Puzzles',
-    path: '/puzzles/math-path'
-  },
-  {
-    id: 'puzzle-7',
-    name: 'Magic Square',
-    icon: '🧙',
-    description: 'Arrange numbers to match row/column sums',
-    category: 'Puzzles',
-    path: '/puzzles/magic-square'
-  },
-  {
-    id: 'puzzle-8',
-    name: 'Prime Hunt',
-    icon: '🔢',
-    description: 'Find prime numbers against the clock',
-    category: 'Puzzles',
-    path: '/puzzles/prime-hunt'
-  },
-  {
-    id: 'puzzle-9',
-    name: 'Equation Balancer',
-    icon: '⚖️',
-    description: 'Balance chemical equations through coefficients',
-    category: 'Puzzles',
-    path: '/puzzles/equation-balancer'
-  },
-  {
-    id: 'puzzle-10',
-    name: 'Fibonacci Quest',
-    icon: '🔢',
-    description: 'Complete Fibonacci sequences',
-    category: 'Number-Based Puzzles',
-    path: '/puzzles/fibonacci-quest'
-  },
-  {
-    id: 'puzzle-11',
-    name: 'Number Sequence',
-    icon: '🔣',
-    description: 'Identify the next number in patterns',
-    category: 'Number-Based Puzzles',
-    path: '/puzzles/number-sequence'
-  },
-];
+const allApps:App[] = allPuzzleApps;
 
 const AppGrid = ({
   apps,
@@ -136,19 +54,14 @@ const AppGrid = ({
   );
 };
 
-// First, define default icons
-const defaultIcons = {
-  'Math Puzzle': '/icons/puzzle.svg',
-  'Algebra Basics': '/icons/algebra.svg',
-  'Geometry Master': '/icons/shapes.svg',
-  // Add more default icons as needed
-};
+
 
 const Home = () => {
   const { activeView } = useSidebar();
   const [addedAppIds, setAddedAppIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const saved = localStorage.getItem('addedAppIds');
@@ -164,10 +77,8 @@ const Home = () => {
       // Prevent duplicates
       if (!prev.includes(appId)) {
         const newIds = [...prev, appId];
-        console.log('Adding app:', appId, 'New state:', newIds);
         return newIds;
       }
-      console.log('App already added:', appId);
       return prev;
     });
   };
@@ -176,7 +87,6 @@ const Home = () => {
     setAddedAppIds(prev => prev.filter(id => id !== appId));
   };
 
-  console.log('Added Apps:', addedAppIds);
 
   const getBreadcrumbItems = () => {
     const items = [{ label: 'Home', path: '/' }];
@@ -188,6 +98,8 @@ const Home = () => {
     return items;
   };
 
+const handleAppClick = (app: App) => () => {
+ router.push(app.path);}
   const myApps = allApps.filter(app => addedAppIds.includes(app.id));
 
   const filteredApps = allApps.filter(app =>
@@ -237,16 +149,10 @@ const Home = () => {
                                   filteredApps.map((app) => (
                                     <div
                                       key={app.id}
+                                      onClick={handleAppClick(app)}
                                       className="p-4 hover:bg-gray-50 cursor-pointer border-b last:border-b-0 flex items-center gap-4"
                                     >
-                                      <img 
-                                        src={app.icon || defaultIcons[app.name]} 
-                                        alt={app.name}
-                                        className="w-10 h-10 object-contain"
-                                        onError={(e) => {
-                                          (e.target as HTMLImageElement).src = '/icons/default-app.svg';
-                                        }}
-                                      />
+                                        <span className="text-2xl">{app.icon}</span> {/* Render icon as text */}
                                       <div>
                                         <h3 className="font-medium">{app.name}</h3>
                                         <p className="text-sm text-gray-500">{app.category}</p>
