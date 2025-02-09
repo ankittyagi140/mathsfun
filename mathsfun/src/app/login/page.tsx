@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { auth } from '@/lib/firebase';
-import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '@/firebase/firebase-config';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader';
@@ -22,6 +22,7 @@ export default function LoginPage() {
     setSnack(null);
 
     try {
+      await setPersistence(auth, browserSessionPersistence);
       await signInWithEmailAndPassword(auth, email, password);
       setSnack({ message: 'Login successful!', type: 'success' });
       setTimeout(() => router.push('/'), 1500);

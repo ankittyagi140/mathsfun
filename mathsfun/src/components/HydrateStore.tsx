@@ -10,7 +10,6 @@ export default function HydrateStore() {
     console.log('Hydrating store from localStorage');
     try {
       const savedApps = localStorage.getItem('myApps');
-      console.log('Raw localStorage data:', savedApps);
       dispatch(hydrateApps());
       console.log('Store hydration complete');
     } catch (error) {

@@ -6,10 +6,13 @@ import { Lilita_One } from 'next/font/google';
 import { Permanent_Marker } from 'next/font/google';
 import { Bubblegum_Sans } from 'next/font/google';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { firebaseApp } from '@/lib/firebase';
+import { app } from '@/firebase/firebase-config'
 import Snack from './Snack';
 import Loader from './Loader';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState, AppDispatch } from '@/store/store';
+import { checkAuthStatus, signOutUser } from '@/store/authSlice';
 
 const headingFont = Lilita_One({
   weight: '400',
@@ -29,15 +32,19 @@ const Header = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const auth = getAuth(firebaseApp);
+  const auth = typeof window !== 'undefined' ? getAuth(app) : null;
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user, loading, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
     setHasMounted(true);
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(!!user);
-    });
-    return () => unsubscribe();
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        setIsLoggedIn(!!user);
+      });
+      return () => unsubscribe();
+    }
   }, [auth]);
 
   useEffect(() => {
@@ -45,8 +52,21 @@ const Header = () => {
     setKidIcon(kidEmojis[Math.floor(Math.random() * kidEmojis.length)]);
   }, []);
 
+  useEffect(() => {
+    dispatch(checkAuthStatus());
+  }, [dispatch]);
+
+  useEffect(() => {
+    console.log('Auth State:', { 
+      user: user?.email, 
+      isAuthenticated, 
+      loading 
+    });
+  }, [user, isAuthenticated, loading]);
+
   const getInitials = () => {
-    const user = auth.currentUser;
+    if (typeof window === 'undefined') return 'Guest';
+    const user = auth?.currentUser;
     return user?.email?.split('@').map(n => n[0]).join('').toUpperCase() || 'Guest';
   };
   const handleLogin = () => {
@@ -58,7 +78,7 @@ const Header = () => {
       await signOut(auth);
       setSnack({ message: 'Logged out successfully!', type: 'success' });
       setTimeout(() => window.location.href = '/', 1500); // Delay redirect for snack visibility
-
+      dispatch(signOutUser());
     } catch (error) {
       console.error('Logout failed:', error);
       setSnack({ message: 'Logout failed. Please try again.', type: 'error' });
@@ -68,18 +88,24 @@ const Header = () => {
   };
 
   if (!hasMounted) {
-    // Server-side render fallback
     return (
-      <header className="bg-white shadow-sm">
+      <header className="bg-yellow-500 shadow-sm sticky top-0 z-50">
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
-              Maths 2 Fun
+            <Link href="/" className="flex items-center">
+              <img 
+                src="/maths2fun.png"
+                alt="maths2fun Logo"
+                className="h-12 w-auto"
+              />
+              <span className={`text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
+                Maths2Fun
+              </span>
             </Link>
             <div className="flex items-center gap-8">
-              <Link href="/puzzles" className="text-gray-700 hover:text-blue-600 transition-colors">
-                Games
-              </Link>
+              <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
+                Loading...
+              </button>
             </div>
           </div>
         </nav>
