@@ -22,6 +22,7 @@ const marker = Permanent_Marker({ subsets: ['latin'], weight: '400' });
 const bubblegum = Bubblegum_Sans({ subsets: ['latin'], weight: '400' });
 
 const Header = () => {
+  const [hasMounted, setHasMounted] = useState(false);
   const [userName, setUserName] = useState('');
   const [kidIcon, setKidIcon] = useState('👦'); // Default emoji for SSR
   const kidEmojis = ['👦', '👧', '🧒', '👦🏽', '👧🏾'];
@@ -30,29 +31,23 @@ const Header = () => {
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const auth = getAuth(firebaseApp);
   const router = useRouter();
-  // useEffect(() => {
-  //   const savedProfile = localStorage.getItem('userProfile');
-  //   if (savedProfile) {
-  //     const profile = JSON.parse(savedProfile);
-  //     setUserName(profile.fullName || 'Guest');
-  //   }
-  // }, []);
 
   useEffect(() => {
-    // This will only run on client side after hydration
-    setKidIcon(kidEmojis[Math.floor(Math.random() * kidEmojis.length)]);
-  }, []);
-
-  useEffect(() => {
+    setHasMounted(true);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsLoggedIn(!!user);
     });
     return () => unsubscribe();
   }, [auth]);
 
+  useEffect(() => {
+    // This will only run on client side after hydration
+    setKidIcon(kidEmojis[Math.floor(Math.random() * kidEmojis.length)]);
+  }, []);
+
   const getInitials = () => {
     const user = auth.currentUser;
-    return user?.displayName?.split(' ').map(n => n[0]).join('').toUpperCase() || 'Guest';
+    return user?.email?.split('@').map(n => n[0]).join('').toUpperCase() || 'Guest';
   };
   const handleLogin = () => {
     router.push('/login');
@@ -72,6 +67,26 @@ const Header = () => {
     }
   };
 
+  if (!hasMounted) {
+    // Server-side render fallback
+    return (
+      <header className="bg-white shadow-sm">
+        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16 items-center">
+            <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
+              Maths 2 Fun
+            </Link>
+            <div className="flex items-center gap-8">
+              <Link href="/puzzles" className="text-gray-700 hover:text-blue-600 transition-colors">
+                Games
+              </Link>
+            </div>
+          </div>
+        </nav>
+      </header>
+    );
+  }
+
   return (
     <header className="bg-yellow-500 shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -89,10 +104,13 @@ const Header = () => {
           <div className="flex items-center gap-8">
             <div className="flex items-center gap-4">
 
-              <div className="w-9 h-9 rounded-full bg-white flex items-center hover:bg-yellow-100 cursor-pointer justify-center text-xl">
+              <div className="w-9 h-9 rounded-full bg-white flex items-center hover:bg-green-600 cursor-pointer justify-center text-xl">
                 {kidIcon}
               </div>
               <span className="text-gray-800 text-sm font-medium">Welcome {getInitials()}</span>
+
+
+
               {isLoggedIn ? (
                 <button 
                   onClick={handleLogout}
@@ -109,7 +127,7 @@ const Header = () => {
                   )}
                 </button>
               ) : (
-                <button onClick={handleLogin} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors flex items-center gap-2">
+                <button onClick={handleLogin} className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors flex items-center gap-2">
                   Login
                 </button>
               )}

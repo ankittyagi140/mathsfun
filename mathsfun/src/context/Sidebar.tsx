@@ -29,7 +29,11 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
   const [activeView, setActiveView] = useState<'dashboard' | 'myapps'>('dashboard');
 
-  const toggle = () => setIsOpen(!isOpen);
+  const toggle = () => {
+    console.log("toggle clicked")
+    setIsOpen(!isOpen);
+  };
+
 
   return (
     <SidebarContext.Provider value={{ isOpen, toggle, activeView, setActiveView }}>

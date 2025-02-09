@@ -4,6 +4,7 @@ import Sidebar from "../components/Sidebar";
 import { useSidebar } from "../context/Sidebar";
 import Breadcrumb from "../components/Breadcrumb";
 import AppCard from '../components/AppCard';
+import { Search } from 'lucide-react';
 
 import Link from 'next/link';
 
@@ -135,9 +136,19 @@ const AppGrid = ({
   );
 };
 
+// First, define default icons
+const defaultIcons = {
+  'Math Puzzle': '/icons/puzzle.svg',
+  'Algebra Basics': '/icons/algebra.svg',
+  'Geometry Master': '/icons/shapes.svg',
+  // Add more default icons as needed
+};
+
 const Home = () => {
   const { activeView } = useSidebar();
   const [addedAppIds, setAddedAppIds] = useState<string[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('addedAppIds');
@@ -179,9 +190,14 @@ const Home = () => {
 
   const myApps = allApps.filter(app => addedAppIds.includes(app.id));
 
+  const filteredApps = allApps.filter(app =>
+    app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    app.category.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
-    <div className="min-h-screen p-8 bg-white">
-      <div className={`flex flex-col min-h-screen`}>
+    <div className="min-h-screen">
+      <div className={`flex flex-col min-h-screen p-8 bg-white`}>
         <main className="flex-1 w-full">
           <div className="max-w-7xl mx-auto px-4 py-6">
 
@@ -197,6 +213,56 @@ const Home = () => {
 
                 {activeView === 'dashboard' ? (
                   <>
+                    <header className="mb-8">
+                      <div className="max-w-7xl mx-auto px-4 py-6">
+                        <div className="flex justify-between items-center">
+                         
+                          <div className="relative w-96">
+                            <div className="flex items-center border rounded-lg px-4 py-2">
+                              <Search className="h-5 w-5 text-gray-400" />
+                              <input
+                                type="text"
+                                placeholder="Search apps..."
+                                className="ml-2 flex-1 outline-none bg-transparent"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onFocus={() => setIsSearchFocused(true)}
+                                onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
+                              />
+                            </div>
+                            
+                            {isSearchFocused && searchQuery && (
+                              <div className="absolute z-10 w-full mt-2 bg-white border rounded-lg shadow-lg max-h-96 overflow-y-auto">
+                                {filteredApps.length > 0 ? (
+                                  filteredApps.map((app) => (
+                                    <div
+                                      key={app.id}
+                                      className="p-4 hover:bg-gray-50 cursor-pointer border-b last:border-b-0 flex items-center gap-4"
+                                    >
+                                      <img 
+                                        src={app.icon || defaultIcons[app.name]} 
+                                        alt={app.name}
+                                        className="w-10 h-10 object-contain"
+                                        onError={(e) => {
+                                          (e.target as HTMLImageElement).src = '/icons/default-app.svg';
+                                        }}
+                                      />
+                                      <div>
+                                        <h3 className="font-medium">{app.name}</h3>
+                                        <p className="text-sm text-gray-500">{app.category}</p>
+                                      </div>
+                                    </div>
+                                  ))
+                                ) : (
+                                  <div className="p-4 text-gray-500">No apps found</div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    </header>
+
                     {myApps.length > 0 && (
                       <AppGrid
                         apps={myApps}

@@ -60,7 +60,7 @@ export default function FibonacciQuest() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen p-8 bg-white bg-gray-50">
       <div className="max-w-4xl mx-auto p-6">
         <div className="bg-white rounded-xl shadow-lg p-8">
           <div className="flex justify-between items-start mb-8">

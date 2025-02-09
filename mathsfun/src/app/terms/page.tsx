@@ -31,8 +31,8 @@ export default function TermsPage() {
           <h2 className="text-xl font-semibold mb-4">Contact Information</h2>
           <p className="text-gray-600">
             All inquiries concerning maths2fun and its policies may be sent to: 
-            <a href="mailto:help@maths2fun.com" className="text-yellow-600 hover:text-yellow-700">
-              help@maths2fun.com
+            <a href="mailto:info@maths2fun.com" className="text-yellow-600 hover:text-yellow-700">
+              info@maths2fun.com
             </a>
           </p>
         </section>

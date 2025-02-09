@@ -96,7 +96,7 @@ export default function AchievementsPage() {
 
   return (
     <div 
-      className="min-h-screen p-8 bg-white"
+      className="min-h-screen p-8 bg-white p-8 bg-white"
     >
       <main className="flex-1 w-full">
       <div className="max-w-7xl mx-auto px-4 py-6">

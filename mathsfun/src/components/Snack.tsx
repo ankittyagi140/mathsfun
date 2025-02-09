@@ -17,13 +17,17 @@ export default function Snack({
   }, [onClose]);
 
   return (
-    <div className="fixed bottom-4 right-4 p-4 flex items-center gap-3 rounded-lg shadow-lg bg-white border border-gray-100 animate-fade-in-up">
+    <div className={`fixed top-20 right-4 p-4 flex items-center gap-3 rounded-lg shadow-lg z-50 ${
+      type === 'success' 
+        ? 'bg-green-100 border border-green-200 text-green-700'
+        : 'bg-red-100 border border-red-200 text-red-700'
+    }`}>
       {type === 'success' ? (
         <CheckCircle2 className="h-5 w-5 text-green-600" />
       ) : (
         <AlertCircle className="h-5 w-5 text-red-600" />
       )}
-      <span className="text-gray-700">{message}</span>
+      <span>{message}</span>
       <button
         onClick={onClose}
         className="ml-2 text-gray-400 hover:text-gray-600 transition-colors"

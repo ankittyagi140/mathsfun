@@ -12,7 +12,7 @@ interface FAQ {
 
 const faqs: FAQ[] = [
   {
-    question: "How do I get started with MathsFun?",
+    question: "How do I get started with Maths2Fun?",
     answer: "Start by exploring our dashboard where you'll find various math games and learning modules. Click on any app to begin learning. Your progress will be automatically tracked!"
   },
   {
@@ -29,14 +29,14 @@ const faqs: FAQ[] = [
   },
   {
     question: "How can I report a problem?",
-    answer: "You can report any issues through our contact form below or by emailing support@mathsfun.com. Our team typically responds within 24 hours."
+    answer: "You can report any issues through our contact form below or by emailing info@maths2fun.com. Our team typically responds within 24 hours."
   }
 ];
 
 const resources = [
   {
     title: "User Guide",
-    description: "Complete guide to using MathsFun",
+    description: "Complete guide to using Maths2Fun",
     icon: FileText,
     link: "/docs/user-guide"
   },
@@ -66,7 +66,7 @@ export default function HelpPage() {
 
   return (
     <div 
-      className="p-8 min-h-screen"
+      className="p-8 min-h-screen p-8 bg-white bg-white"
     >
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 py-6">

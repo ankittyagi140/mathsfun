@@ -11,6 +11,7 @@ import { Lilita_One, Luckiest_Guy, Fredoka } from 'next/font/google';
 import './fonts.css';
 import HydrateStore from '@/components/HydrateStore';
 import { SnackbarProvider } from '@/context/SnackbarContext';
+import { SidebarProvider } from '@/context/Sidebar';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -63,10 +64,12 @@ export default function RootLayout({
       <body className="bg-yellow-50">
         <Providers>
           <SnackbarProvider>
-            <HydrateStore />
-            <Header />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
+            <SidebarProvider>
+              <HydrateStore />
+              <Header />
+              <main className="min-h-screen p-8 bg-white">{children}</main>
+              <Footer />
+            </SidebarProvider>
           </SnackbarProvider>
         </Providers>
       </body>

@@ -85,7 +85,7 @@ const MathMatch = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen p-8 bg-white bg-gray-50 p-8">
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold text-center mb-8 text-purple-600">
           🧠 Math Match

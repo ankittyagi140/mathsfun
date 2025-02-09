@@ -23,7 +23,7 @@ const LoginModal = ({ isOpen, onClose, onLogin }: {
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-lg w-96">
-        <h2 className="text-xl font-bold mb-4">Welcome to MathsFun! 🎉</h2>
+        <h2 className="text-xl font-bold mb-4">Welcome to Maths2Fun! 🎉</h2>
         <input
           type="text"
           placeholder="Enter your name (optional)"

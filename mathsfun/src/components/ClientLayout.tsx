@@ -12,7 +12,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <html lang="en" className={`${currentTheme.mainBg} ${currentTheme.textColor}`}>
-      <body className="min-h-screen">
+      <body className="min-h-screen p-8 bg-white">
         {children}
       </body>
     </html>
