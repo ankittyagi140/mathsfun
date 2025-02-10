@@ -31,10 +31,26 @@ const comicNeue = Comic_Neue({
 
 // Metadata needs to be in a separate file for app router
 export const metadata: Metadata = {
-  title: 'maths2fun - Interactive Math Learning',
-  description: 'Learn math through fun interactive games and puzzles',
-  icons: {
-    icon: '/favicon.ico',
+  title: 'Maths2Fun - Interactive Math Learning Platform',
+  description: 'Master mathematics through engaging quizzes, interactive lessons, and fun problem-solving challenges. Suitable for all skill levels from beginner to advanced.',
+  keywords: ['math learning', 'interactive quizzes', 'mathematics education', 'problem solving', 'online math practice'],
+  openGraph: {
+    title: 'Maths2Fun - Learn Math the Fun Way',
+    description: 'Transform your math skills with our interactive learning platform',
+    images: [
+      {
+        url: '/maths2fun-og.png',
+        width: 1200,
+        height: 630,
+        alt: 'Maths2Fun Learning Platform',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Maths2Fun - Interactive Math Learning',
+    description: 'Engaging math education platform for all ages',
+    images: ['/maths2fun-twitter.png'],
   },
 };
 
