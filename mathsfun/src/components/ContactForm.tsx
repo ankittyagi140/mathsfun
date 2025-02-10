@@ -1,7 +1,7 @@
 'use client';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2} from 'lucide-react';
 import Snack from './Snack';
 
 type FormData = {
@@ -33,9 +33,9 @@ export default function ContactForm() {
       }
 
       setSnack({ message: 'Message sent successfully!', type: 'success' });
-    } catch (error: any) {
+    } catch (error: Error) {
       setSnack({ 
-        message: 'Failed to send message. Please email us at info@maths2fun.com', 
+        message: error.message || 'Failed to send message', 
         type: 'error' 
       });
     } finally {

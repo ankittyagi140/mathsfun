@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Popup from '../../../components/Popup';
 
 type Cell = {
@@ -57,7 +57,7 @@ const CrosswordPuzzle = () => {
     setSelectedCell({ row, col });
   };
 
-  const handleKeyPress = (e: KeyboardEvent) => {
+  const handleKeyPress = useCallback((e: KeyboardEvent) => {
     if (!selectedCell) return;
     
     const { row, col } = selectedCell;
@@ -68,26 +68,24 @@ const CrosswordPuzzle = () => {
       setGrid(newGrid);
       moveToNextCell();
     }
-  };
+  }, [selectedCell, grid, moveToNextCell]);
 
-  const moveToNextCell = () => {
+  const moveToNextCell = useCallback(() => {
     if (!selectedCell) return;
     
     const { row, col } = selectedCell;
-    const nextCol = direction === 'across' ? col + 1 : col;
-    const nextRow = direction === 'down' ? row + 1 : row;
-    
+       
     if (direction === 'across' && col < grid[0].length - 1) {
       setSelectedCell({ row, col: col + 1 });
     } else if (direction === 'down' && row < grid.length - 1) {
       setSelectedCell({ row: row + 1, col });
     }
-  };
+  }, [selectedCell, direction, grid]);
 
   useEffect(() => {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedCell, direction]);
+  }, [selectedCell, direction, handleKeyPress]);
 
   const checkCompletion = () => {
     return grid.every(row => 

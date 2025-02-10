@@ -5,7 +5,6 @@ import Popup from '../../../components/Popup';
 // Simplified 4x4 Sudoku generator with emoji support
 const generateKidsSudoku = () => {
   // Predefined kid-friendly symbols (can be replaced with emojis)
-  const symbols = [1, 2, 3, 4];
   const solution = [
     [1, 2, 3, 4],
     [3, 4, 1, 2],
@@ -20,44 +19,44 @@ const generateKidsSudoku = () => {
 };
 
 // Add this proper generateSolution implementation
-const generateSolution = (size: number): number[][] => {
-  // Basic 4x4 solution pattern
-  if (size === 4) {
-    return [
-      [1, 2, 3, 4],
-      [3, 4, 1, 2],
-      [2, 1, 4, 3],
-      [4, 3, 2, 1]
-    ];
-  }
+// const generateSolution = (size: number): number[][] => {
+//   // Basic 4x4 solution pattern
+//   if (size === 4) {
+//     return [
+//       [1, 2, 3, 4],
+//       [3, 4, 1, 2],
+//       [2, 1, 4, 3],
+//       [4, 3, 2, 1]
+//     ];
+//   }
 
   // For larger grids, use a simple pattern (you can expand this later)
-  const solution: number[][] = [];
-  for (let i = 0; i < size; i++) {
-    const row: number[] = [];
-    for (let j = 0; j < size; j++) {
-      row.push((i + j) % size + 1);
-    }
-    solution.push(row);
-  }
-  return solution;
-};
+//   const solution: number[][] = [];
+//   for (let i = 0; i < size; i++) {
+//     const row: number[] = [];
+//     for (let j = 0; j < size; j++) {
+//       row.push((i + j) % size + 1);
+//     }
+//     solution.push(row);
+//   }
+//   return solution;
+// };
 
 // Update generateSudoku to handle initial state
-const generateSudoku = (level: number) => {
-  const { size, filledCells } = DIFFICULTY_LEVELS[Math.min(level - 1, DIFFICULTY_LEVELS.length - 1)];
-  const solution = generateSolution(size);
+// const generateSudoku = (level: number) => {
+//   const { size, filledCells } = DIFFICULTY_LEVELS[Math.min(level - 1, DIFFICULTY_LEVELS.length - 1)];
+//   const solution = generateSolution(size);
   
-  // Add null check for solution
-  if (!solution || solution.length === 0) {
-    console.error('Failed to generate solution');
-    return [[]];
-  }
+//   // Add null check for solution
+//   if (!solution || solution.length === 0) {
+//     console.error('Failed to generate solution');
+//     return [[]];
+//   }
 
-  return solution.map(row => 
-    row.map(cell => Math.random() < filledCells ? cell : 0)
-  );
-};
+//   return solution.map(row => 
+//     row.map(cell => Math.random() < filledCells ? cell : 0)
+//   );
+// };
 
 const SudokuPuzzle = () => {
   const [grid, setGrid] = useState<number[][]>([]);

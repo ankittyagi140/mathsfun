@@ -1,7 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
-import Header from '@/components/Header';
 import { generateFibonacciSequence } from '@/lib/math-utils';
 import { InfoIcon, LightbulbIcon } from 'lucide-react';
 
@@ -14,11 +13,7 @@ export default function FibonacciQuest() {
   const [showHint, setShowHint] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
 
-  useEffect(() => {
-    generateNewSequence();
-  }, [level]);
-
-  const generateNewSequence = () => {
+  const generateNewSequence = useCallback(() => {
     const baseLength = 5 + level;
     const fullSequence = generateFibonacciSequence(baseLength);
     const hiddenIndex = Math.floor(Math.random() * (baseLength - 2)) + 2;
@@ -30,7 +25,11 @@ export default function FibonacciQuest() {
     setSequence(puzzleSequence);
     setUserInput('');
     setIsCorrect(null);
-  };
+  }, [level]);
+
+  useEffect(() => {
+    generateNewSequence();
+  }, [generateNewSequence]);
 
   const validateAnswer = (e: React.FormEvent) => {
     e.preventDefault();

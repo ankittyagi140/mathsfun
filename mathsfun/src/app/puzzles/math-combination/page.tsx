@@ -1,9 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
-import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
 type Step = {
@@ -14,17 +12,19 @@ type Step = {
 const MathCombination = () => {
   const [numbers, setNumbers] = useState<number[]>([]);
   const [target, setTarget] = useState(0);
-  const [steps, setSteps] = useState<Step[]>([]);
+
   const [isCorrect, setIsCorrect] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
   const [time, setTime] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [operators, setOperators] = useState<string[]>(['+', '+', '+']);
   const [showError, setShowError] = useState(false);
-
-  const generateSolvableGame = () => {
+  const steps: Step[] = [];
+  const generateSolvableGame = useCallback(() => {
     const MAX_ATTEMPTS = 100;
     let attempts = 0;
+
+
     
     while (attempts < MAX_ATTEMPTS) {
       const newNumbers = Array.from({length: 4}, () => Math.floor(Math.random() * 9) + 1);
@@ -41,9 +41,9 @@ const MathCombination = () => {
       newNumbers: [6, 3, 2, 4], 
       newTarget: 24 
     };
-  };
+  }, [hasSolution]);
 
-  const hasSolution = (numbers: number[], target: number) => {
+  const hasSolution = useCallback((numbers: number[], target: number) => {
     const operatorCombinations = generateAllOperatorCombinations();
     return operatorCombinations.some(ops => {
       try {
@@ -59,13 +59,12 @@ const MathCombination = () => {
         return false;
       }
     });
-  };
+  }, [generateAllOperatorCombinations]);
 
-  const generateAllOperatorCombinations = () => {
+  const generateAllOperatorCombinations = useCallback(() => {
     const operators = ['+', '-', '×', '÷'];
     const combinations: string[][] = [];
     
-    // Generate all possible 3-operator combinations (4^3 = 64 possibilities)
     for (let i = 0; i < operators.length; i++) {
       for (let j = 0; j < operators.length; j++) {
         for (let k = 0; k < operators.length; k++) {
@@ -74,20 +73,20 @@ const MathCombination = () => {
       }
     }
     return combinations;
-  };
+  }, []);
 
-  const generateNewGame = () => {
+  const generateNewGame = useCallback(() => {
     const { newNumbers, newTarget } = generateSolvableGame();
     setNumbers(newNumbers);
     setTarget(newTarget);
     setOperators(['+', '+', '+']);
     setIsCorrect(false);
     setShowError(false);
-  };
+  }, [generateSolvableGame]);
 
   useEffect(() => {
     generateNewGame();
-  }, []);
+  }, [generateNewGame]);
 
   useEffect(() => {
     let interval: NodeJS.Timeout;
@@ -105,12 +104,7 @@ const MathCombination = () => {
     setOperators(newOperators);
   };
 
-  const handleNumberSelect = (number: number) => {
-    const numberCount = steps.filter(s => s.type === 'number').length;
-    if (numberCount >= numbers.length) return;
 
-    setSteps(prev => [...prev, { value: number.toString(), type: 'number' }]);
-  };
 
   const validateSolution = () => {
     try {
@@ -134,15 +128,6 @@ const MathCombination = () => {
       }
     } catch {
       setShowError(true);
-    }
-  };
-
-  const handleSubmit = () => {
-    if (validateSolution()) {
-      setIsCorrect(true);
-      setIsActive(false);
-    } else {
-      alert('Incorrect solution! Try again.');
     }
   };
 
@@ -204,7 +189,7 @@ const MathCombination = () => {
 
               {showError && (
                 <div className="bg-red-100 p-3 rounded-lg text-red-700 text-center">
-                  ❌ That combination doesn't reach the target. Keep trying!
+                  ❌ That combination doesn&apos;t reach the target. Keep trying!
                 </div>
               )}
 

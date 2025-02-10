@@ -1,10 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useSidebar, sidebarItems } from '../context/Sidebar';
+import { useSidebar } from '../context/Sidebar';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { 
   LayoutDashboard,
@@ -12,8 +11,6 @@ import {
   Trophy,
   Settings,
   HelpCircle,
-  Book,
-  Puzzle
 } from 'lucide-react';
 
 const links = [

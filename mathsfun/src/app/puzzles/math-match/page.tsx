@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
-import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
 type Card = {
@@ -18,6 +17,7 @@ const MathMatch = () => {
   const [matches, setMatches] = useState(0);
   const [moves, setMoves] = useState(0);
   const [isInteractable, setIsInteractable] = useState(true);
+  const [gameWon, setGameWon] = useState(false);
 
   const numberPairs = [
     { number: '12', expression: '3×4' },
@@ -28,7 +28,7 @@ const MathMatch = () => {
     { number: '10', expression: '√100' },
   ];
 
-  const initializeGame = () => {
+  const initializeGame = useCallback(() => {
     const generatedCards = numberPairs
       .flatMap(pair => [
         { id: Math.random().toString(), value: pair.number, isFlipped: false, isMatched: false },
@@ -39,7 +39,7 @@ const MathMatch = () => {
     setCards(generatedCards);
     setMatches(0);
     setMoves(0);
-  };
+  }, [numberPairs]);
 
   const handleCardClick = (id: string) => {
     if (!isInteractable || flippedCards.length === 2 || cards.find(c => c.id === id)?.isMatched) return;
@@ -78,11 +78,17 @@ const MathMatch = () => {
         setIsInteractable(true);
       }, 1000);
     }
-  }, [flippedCards]);
+  }, [flippedCards, cards, numberPairs]);
+
+  useEffect(() => {
+    if (cards.every(c => c.isMatched)) {
+      setGameWon(true);
+    }
+  }, [cards]);
 
   useEffect(() => {
     initializeGame();
-  }, []);
+  }, [initializeGame]);
 
   return (
     <div className="min-h-screen p-8 bg-white bg-gray-50 p-8">
@@ -139,7 +145,7 @@ const MathMatch = () => {
           </div>
         </div>
 
-        {matches === numberPairs.length && (
+        {gameWon && (
           <Popup title="🎉 Perfect Match!" onClose={() => {}}>
             <div className="text-center p-4">
               <p className="text-xl mb-4">You matched all pairs in {moves} moves! 🏆</p>

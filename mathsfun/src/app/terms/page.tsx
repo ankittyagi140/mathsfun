@@ -7,11 +7,11 @@ export default function TermsPage() {
         <section className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Agreement Between User and maths2fun</h2>
           <p className="text-gray-600 mb-4">
-            "maths2fun" is comprised of various Web pages operated by maths2fun and located at maths2fun.com. 
+            &quot;maths2fun&quot; is comprised of various Web pages operated by maths2fun and located at maths2fun.com. 
             maths2fun is offered to you conditioned on your acceptance of our Terms of Service without modification 
             of the terms, conditions and notices contained herein and applies to use of the free and paid versions 
             of maths2fun. Your use of maths2fun constitutes your agreement to all such terms, conditions and notices.
-          </p>
+          </p>    
         </section>
 
         <section className="mb-8">

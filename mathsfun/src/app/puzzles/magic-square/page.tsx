@@ -1,9 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
-import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
 const MagicSquare = () => {
@@ -28,7 +26,7 @@ const MagicSquare = () => {
   const checkMagicSquare = (currentGrid: number[][]) => {
     const magicSum = 15;
     // Check rows
-    for (let row of currentGrid) {
+    for (const row of currentGrid) {
       if (row.reduce((a, b) => a + b, 0) !== magicSum) return false;
     }
     // Check columns

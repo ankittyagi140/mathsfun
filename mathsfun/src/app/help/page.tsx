@@ -2,7 +2,7 @@
 
 import Sidebar from "../../components/Sidebar";
 import Breadcrumb from "../../components/Breadcrumb";
-import { Mail, MessageCircle, Phone, FileText, Plus, Minus, ExternalLink } from 'lucide-react';
+import { Mail, FileText, Plus, Minus, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
 interface FAQ {

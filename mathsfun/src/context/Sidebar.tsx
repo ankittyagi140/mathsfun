@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState } from 'react';
-import { Home, Bell, Plus, LayoutDashboard, Settings, BookOpen, Trophy, HelpCircle } from 'lucide-react';
+import { Home, LayoutDashboard, Settings, Trophy, HelpCircle } from 'lucide-react';
 
 interface SidebarContextType {
   isOpen: boolean;

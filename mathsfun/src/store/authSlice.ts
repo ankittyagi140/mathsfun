@@ -38,8 +38,8 @@ export const signIn = createAsyncThunk(
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       return userCredential.user;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
     }
   }
 );
@@ -50,8 +50,8 @@ export const signOutUser = createAsyncThunk(
     try {
       await signOut(auth);
       return null;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
     }
   }
 );

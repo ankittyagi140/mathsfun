@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
-import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
 type EquationSide = { element: string; count: number }[];
@@ -14,7 +13,7 @@ const EquationBalancer = () => {
   const [hasWon, setHasWon] = useState(false);
   const [showHelp, setShowHelp] = useState(true);
 
-  const equations = [
+  const equations = useMemo(() => [
     { 
       left: [{ element: 'H₂', count: 2 }, { element: 'O₂', count: 1 }], 
       right: [{ element: 'H₂O', count: 1 }] // Unbalanced (H:4 vs 2, O:2 vs 1)
@@ -27,9 +26,9 @@ const EquationBalancer = () => {
       left: [{ element: 'CH₄', count: 1 }, { element: 'O₂', count: 2 }], 
       right: [{ element: 'CO₂', count: 1 }, { element: 'H₂O', count: 1 }] // Unbalanced (H:4 vs 2)
     },
-  ];
+  ], []);
 
-  const generateNewEquation = () => {
+  const generateNewEquation = useCallback(() => {
     const equation = equations[Math.floor(Math.random() * equations.length)];
     const scrambleCoefficients = (side: EquationSide) => 
       side.map(item => ({ 
@@ -41,7 +40,7 @@ const EquationBalancer = () => {
     setRightSide(scrambleCoefficients(equation.right));
     setHasWon(false);
     setScore(0);
-  };
+  }, [equations]);
 
   const checkBalance = () => {
     const elements = new Set([...leftSide, ...rightSide].map(x => x.element));
@@ -74,7 +73,7 @@ const EquationBalancer = () => {
 
   useEffect(() => {
     generateNewEquation();
-  }, []);
+  }, [generateNewEquation]);
 
   return (
     <div className="min-h-screen p-8 bg-white bg-gray-50 p-8">

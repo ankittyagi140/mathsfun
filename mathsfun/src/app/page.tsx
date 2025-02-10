@@ -21,9 +21,6 @@ const allApps:App[] = allPuzzleApps;
 const AppGrid = ({
   apps,
   title,
-  onAddApp,
-  showAddButton = false,
-  installedApps = new Set()
 }: {
   apps: App[],
   title: string,
@@ -71,17 +68,6 @@ const Home = () => {
   useEffect(() => {
     localStorage.setItem('addedAppIds', JSON.stringify(addedAppIds));
   }, [addedAppIds]);
-
-  const handleAddApp = (appId: string) => {
-    setAddedAppIds(prev => {
-      // Prevent duplicates
-      if (!prev.includes(appId)) {
-        const newIds = [...prev, appId];
-        return newIds;
-      }
-      return prev;
-    });
-  };
 
   const handleRemoveApp = (appId: string) => {
     setAddedAppIds(prev => prev.filter(id => id !== appId));

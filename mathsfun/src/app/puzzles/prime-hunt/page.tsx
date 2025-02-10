@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
-import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
 const PrimeNumberHunt = () => {
@@ -22,7 +21,7 @@ const PrimeNumberHunt = () => {
     return true;
   };
 
-  const generateNumbers = () => {
+  const generateNumbers = useCallback(() => {
     // Generate exactly 10 unique primes
     const primes = new Set<number>();
     while (primes.size < 10) {
@@ -39,7 +38,7 @@ const PrimeNumberHunt = () => {
 
     setNumbers([...Array.from(primes), ...Array.from(nonPrimes)]
       .sort(() => Math.random() - 0.5));
-  };
+  }, []);
 
   const handleNumberClick = (num: number) => {
     if (gameStatus !== 'playing' || selectedNumbers.includes(num)) return;
@@ -57,7 +56,7 @@ const PrimeNumberHunt = () => {
 
   useEffect(() => {
     generateNumbers();
-  }, []);
+  }, [generateNumbers]);
 
   useEffect(() => {
     if (timeLeft > 0 && gameStatus === 'playing') {
@@ -147,16 +146,18 @@ const PrimeNumberHunt = () => {
               <p className="text-lg">✨ Quick prime checks:</p>
               <div className="bg-yellow-100 p-3 rounded-lg">
                 <ul className="list-disc pl-5 space-y-2">
-                  <li>Even numbers >2 are not prime</li>
-                  <li>Numbers ending with 5 (except 5) aren't prime</li>
+                  <li>Even numbers &gt; 2 are not prime</li>
+                  <li>Numbers ending with 5 (except 5) aren&apos;t prime</li>
                   <li>Check divisibility up to square root</li>
                   <li>Primes under 50: 2,3,5,7,11,13,17,19,23,29,31,37,41,43,47</li>
+
                 </ul>
               </div>
               <p className="text-center text-sm text-gray-600">
-                Look for numbers that can't be divided easily!
+                Look for numbers that can&apos;t be divided easily!
               </p>
             </div>
+
           </Popup>
         )}
 

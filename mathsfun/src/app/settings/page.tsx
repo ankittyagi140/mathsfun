@@ -16,7 +16,6 @@ import { RootState } from '@/store/store';
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
 
-
 export default function SettingsPage() {
   const [displayName, setDisplayName] = useState(auth.currentUser?.displayName || '');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -25,8 +24,8 @@ export default function SettingsPage() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [loadingPassword, setLoadingPassword] = useState(false);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const { user, isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
-console.log(user,isAuthenticated,loading);
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoadingProfile(true);
@@ -37,10 +36,12 @@ console.log(user,isAuthenticated,loading);
         setSnack({ message: 'Profile updated successfully!', type: 'success' });
       }
     } catch (error) {
-      setSnack({ message: 'Failed to update profile', type: 'error' });
+      const err = error as Error;
+      setSnack({ message: err.message || 'Failed to update profile', type: 'error' });
     } finally {
       setLoadingProfile(false);
     }
+
   };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
@@ -64,11 +65,9 @@ console.log(user,isAuthenticated,loading);
         setNewPassword('');
         setConfirmPassword('');
       }
-    } catch (error: any) {
-      setSnack({
-        message: error.message || 'Failed to update password',
-        type: 'error'
-      });
+    } catch (error) {
+      const err = error as Error;
+      setSnack({ message: err.message || 'Failed to update password', type: 'error' });
     } finally {
       setLoadingPassword(false);
     }

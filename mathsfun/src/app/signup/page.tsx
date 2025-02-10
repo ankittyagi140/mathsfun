@@ -25,8 +25,9 @@ export default function SignupPage() {
       await createUserWithEmailAndPassword(auth, email, password);
       setSnack({ message: 'Account created successfully!', type: 'success' });
       router.push('/login');
-    } catch (err: any) {
-      setError(err.message || 'Signup failed');
+    } catch (error) {
+      const err = error as Error;
+      setError(err.message || 'Failed to sign up');
       setSnack({ message: 'Failed to create account', type: 'error' });
     } finally {
       setIsLoading(false);

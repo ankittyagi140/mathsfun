@@ -1,6 +1,5 @@
 'use client'
 import Link from 'next/link';
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/store';
 import { addApp, removeApp } from '@/store/appsSlice';

@@ -1,9 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { Lilita_One } from 'next/font/google';
-import { Permanent_Marker } from 'next/font/google';
+import { useEffect, useState, useMemo } from 'react';
 import { Bubblegum_Sans } from 'next/font/google';
 import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
 import { app } from '@/firebase/firebase-config'
@@ -13,22 +11,14 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '@/store/store';
 import { checkAuthStatus, signOutUser } from '@/store/authSlice';
-
-const headingFont = Lilita_One({
-  weight: '400',
-  subsets: ['latin'],
-  display: 'swap',
-});
-
-const marker = Permanent_Marker({ subsets: ['latin'], weight: '400' });
+import Image from 'next/image';
 
 const bubblegum = Bubblegum_Sans({ subsets: ['latin'], weight: '400' });
 
 const Header = () => {
   const [hasMounted, setHasMounted] = useState(false);
-  const [userName, setUserName] = useState('');
   const [kidIcon, setKidIcon] = useState('👦'); // Default emoji for SSR
-  const kidEmojis = ['👦', '👧', '🧒', '👦🏽', '👧🏾'];
+  const kidEmojis = useMemo(() => ['👦', '👧', '🧒', '��🏽', '👧🏾'], []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
@@ -50,7 +40,7 @@ const Header = () => {
   useEffect(() => {
     // This will only run on client side after hydration
     setKidIcon(kidEmojis[Math.floor(Math.random() * kidEmojis.length)]);
-  }, []);
+  }, [kidEmojis]);
 
   useEffect(() => {
     dispatch(checkAuthStatus());
@@ -93,10 +83,11 @@ const Header = () => {
         <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16 items-center">
             <Link href="/" className="flex items-center">
-              <img 
+              <Image 
                 src="/maths2fun.png"
                 alt="maths2fun Logo"
-                className="h-12 w-auto"
+                width={120}
+                height={40}
               />
               <span className={`text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
                 Maths2Fun
@@ -118,10 +109,11 @@ const Header = () => {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link href="/" className="flex items-center">
-            <img 
+            <Image 
               src="/maths2fun.png"
               alt="maths2fun Logo"
-              className="h-12 w-auto"
+              width={120}
+              height={40}
             />
             <span className={`text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
               Maths2Fun

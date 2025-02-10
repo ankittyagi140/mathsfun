@@ -38,11 +38,12 @@ export async function POST(request: Request) {
       status: 200,
       headers: { 'Content-Type': 'application/json' }
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : 'Failed to send message';
     console.error('Error processing contact form:', error);
     return new Response(JSON.stringify({ 
       success: false,
-      error: error.message || 'Internal server error'
+      error: message
     }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }

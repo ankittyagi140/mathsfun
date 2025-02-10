@@ -1,9 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../redux/slices/userSlice';
-import type { RootState, AppDispatch } from '../redux/store';
 
 const LoginModal = ({ isOpen, onClose, onLogin }: { 
   isOpen: boolean;
@@ -11,14 +8,8 @@ const LoginModal = ({ isOpen, onClose, onLogin }: {
   onLogin: (name: string) => void;
 }) => {
   const [name, setName] = useState('');
-  const user = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch<AppDispatch>();
 
   if (!isOpen) return null;
-
-  const handleLogin = (name: string, email: string) => {
-    dispatch(setUser({ name, email }));
-  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">

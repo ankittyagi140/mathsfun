@@ -10,7 +10,6 @@ import Snack from '@/components/Snack';
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const router = useRouter();
@@ -18,7 +17,6 @@ export default function LoginPage() {
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError('');
     setSnack(null);
 
     try {
@@ -26,10 +24,12 @@ export default function LoginPage() {
       await signInWithEmailAndPassword(auth, email, password);
       setSnack({ message: 'Login successful!', type: 'success' });
       setTimeout(() => router.push('/'), 1500);
-    } catch (err) {
-      const errorMessage = (err as Error).message.includes('user-not-found') 
+    } catch (error) {
+      const err = error as Error;
+      const errorMessage = err.message.includes('user-not-found') 
         ? 'Account not found' 
         : 'Invalid email or password';
+
       setSnack({ message: errorMessage, type: 'error' });
     } finally {
       setIsLoading(false);
@@ -45,11 +45,14 @@ export default function LoginPage() {
       await signInWithPopup(auth, provider);
       setSnack({ message: 'Google login successful!', type: 'success' });
       setTimeout(() => router.push('/dashboard'), 1500);
-    } catch (err) {
+    } catch (error) {
+      const err = error as Error;
+      console.log(err.message);
       setSnack({ message: 'Google login failed. Please try again.', type: 'error' });
     } finally {
       setIsLoading(false);
     }
+
   };
 
   return (
@@ -118,7 +121,7 @@ export default function LoginPage() {
         </div>
 
         <p className="mt-6 text-center text-sm text-gray-600">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <Link href="/signup" className="text-blue-600 hover:underline">
             Sign up here
           </Link>

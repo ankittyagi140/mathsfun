@@ -1,8 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState } from 'react';
 import Confetti from 'react-confetti';
-import Link from 'next/link';
 import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
@@ -11,7 +9,6 @@ const EquationBuilder = () => {
   const [target, setTarget] = useState(0);
   const [operators, setOperators] = useState<string[]>(['+', '+', '+']);
   const [isCorrect, setIsCorrect] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
 
   const generateNewGame = () => {
     const newNumbers = Array.from({length: 4}, () => Math.floor(Math.random() * 9) + 1);

@@ -3,17 +3,18 @@
 
 import Sidebar from "../../components/Sidebar";
 import Breadcrumb from "../../components/Breadcrumb";
-import { Medal, Trophy, Star, Award, Target, Crown, Zap, BookOpen, Lock } from 'lucide-react';
+import { Medal, Trophy, Star, Target, Crown, Zap, BookOpen, Lock } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store/store';
+import type { LucideIcon } from 'lucide-react';
 
 interface Achievement {
   id: string;
   title: string;
   description: string;
-  icon: any;
+  icon: LucideIcon;
   progress: number;
   total: number;
   category: string;
@@ -89,7 +90,7 @@ export default function AchievementsPage() {
     { label: 'Home', path: '/' },
     { label: 'Achievements', path: '/achievements' }
   ];
-  const { user, isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
+  const {  isAuthenticated} = useSelector((state: RootState) => state.auth);
   const filteredAchievements = filter === 'all'
     ? achievements
     : achievements.filter(a => a.category.toLowerCase() === filter.toLowerCase());

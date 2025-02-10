@@ -17,13 +17,13 @@ export default function PrivacyPage() {
             </ul>
           </div>
 
-          <h3 className="font-medium mb-2">1.2 Children's Privacy</h3>
+          <h3 className="font-medium mb-2">1.2 Children&apos;s Privacy</h3>
           <div className="text-gray-600">
             We comply with COPPA regulations:
             <ul className="list-disc pl-6">
               <li>No collection of personal data from users under 13</li>
               <li>Parental consent required for any data collection</li>
-              <li>Parents can review/delete child's information</li>
+              <li>Parents can review/delete child&apos;s information</li>
             </ul>
           </div>
         </section>
@@ -54,8 +54,9 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold mb-4">4. Advertising</h2>
           <div className="text-gray-600 mb-4">
             We show contextually-based ads or other carefully-selected ads which are not based on 
-            a user's browsing behavior. For more information about online advertising choices:
+            a user&apos;s browsing behavior. For more information about online advertising choices:
           </div>
+
           {/* <a 
             href="https://www.networkadvertising.org/managing/opt_out.asp" 
             className="text-yellow-600 hover:text-yellow-700"

@@ -8,10 +8,11 @@ export default function AboutPage() {
           <h2 className="text-xl font-semibold mb-4">Our Mission</h2>
           <div className="text-gray-600 mb-4">
             <p>
-              At maths2fun, we're dedicated to making mathematics engaging and accessible 
+              At maths2fun, we&apos;are dedicated to making mathematics engaging and accessible 
               for learners of all ages through interactive games and puzzles.
             </p>
           </div>
+
         </section>
 
         <section className="mb-8">

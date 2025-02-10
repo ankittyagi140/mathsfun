@@ -1,27 +1,16 @@
 'use client';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { RootState } from '@/store/store';
 import AppCard from '@/components/AppCard';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import Sidebar from '@/components/Sidebar';
 import { useState } from 'react';
 import Snack from '@/components/Snack';
 import Breadcrumb from '@/components/Breadcrumb';
 
+
 export default function MyAppsPage() {
   const myApps = useSelector((state: RootState) => state.apps.myApps);
-  const pathname = usePathname();
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-
-  const handleAddToMyApps = async (appId: string) => {
-    try {
-      // ... API call
-      setSnack({ message: 'App added successfully!', type: 'success' });
-    } catch (error) {
-      setSnack({ message: 'Failed to add app', type: 'error' });
-    }
-  };
 
   const breadcrumbItems = [
     { label: 'Home', path: '/' },

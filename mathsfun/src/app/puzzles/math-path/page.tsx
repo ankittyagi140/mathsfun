@@ -1,9 +1,6 @@
 'use client';
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
-import Link from 'next/link';
-import Header from '@/components/Header';
 import Popup from '@/components/Popup';
 
 type CellType = {
@@ -17,15 +14,12 @@ const MathPathFinder = () => {
   const [grid, setGrid] = useState<CellType[][]>([]);
   const [target, setTarget] = useState(0);
   const [selectedPath, setSelectedPath] = useState<CellType[]>([]);
-  const [isValidPath, setIsValidPath] = useState(false);
   const [hasWon, setHasWon] = useState(false);
   const [showHelp, setShowHelp] = useState(false);
-  const [hintsRemaining, setHintsRemaining] = useState(3);
-  const [showHint, setShowHint] = useState(false);
   const [showError, setShowError] = useState(false);
   const [pathHistory, setPathHistory] = useState<CellType[][]>([]);
 
-  const generateNewPuzzle = () => {
+  const generateNewPuzzle = useCallback(() => {
     // Generate a 3x3 grid with numbers and operators
     const newGrid: CellType[][] = [];
     const numbers = Array.from({length: 5}, () => Math.floor(Math.random() * 9) + 1);
@@ -53,10 +47,8 @@ const MathPathFinder = () => {
     setGrid(newGrid);
     setSelectedPath([]);
     setHasWon(false);
-    setIsValidPath(false);
     setHintsRemaining(3);
-    setShowHint(false);
-  };
+  }, []);
 
   const findValidSolution = (grid: CellType[][]) => {
     // Simple solver to ensure at least one valid path exists
@@ -80,7 +72,7 @@ const MathPathFinder = () => {
 
   useEffect(() => {
     generateNewPuzzle();
-  }, []);
+  }, [generateNewPuzzle]);
 
   const handleCellClick = (cell: CellType) => {
     if (selectedPath.length === 0 && !cell.isNumber) return;
@@ -121,13 +113,6 @@ const MathPathFinder = () => {
       }
     } catch {
       setShowError(true);
-    }
-  };
-
-  const handleShowHint = () => {
-    if (hintsRemaining > 0) {
-      setShowHint(true);
-      setHintsRemaining(prev => prev - 1);
     }
   };
 

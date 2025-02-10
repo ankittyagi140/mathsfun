@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AppDispatch } from './store';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
 interface App {
   id: string;
@@ -16,6 +18,7 @@ const loadFromLocalStorage = (): App[] => {
     const stored = localStorage.getItem('myApps');
     return stored ? JSON.parse(stored) : [];
   } catch (error) {
+    console.error('Error loading apps from localStorage:', error);
     return [];
   }
 };
@@ -70,4 +73,15 @@ const appsSlice = createSlice({
 
 // Update the exports
 export const { setApps, addApp, removeApp } = appsSlice.actions;
-export default appsSlice.reducer; 
+export default appsSlice.reducer;
+
+export const fetchApps = createAsyncThunk(
+  'apps/fetchAll',
+  async (_, { rejectWithValue }) => {
+    try {
+      // ... implementation
+    } catch (error) {
+      return rejectWithValue((error as Error).message);
+    }
+  }
+); 

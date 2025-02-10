@@ -1,8 +1,7 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
 import { InfoIcon, LightbulbIcon } from 'lucide-react';
-import Header from '@/components/Header';
 
 type SequenceType = 'arithmetic' | 'geometric' | 'quadratic';
 
@@ -16,7 +15,7 @@ export default function NumberSequence() {
   const [showInstructions, setShowInstructions] = useState(true);
   const [sequenceType, setSequenceType] = useState<SequenceType>('arithmetic');
 
-  const generateSequence = () => {
+  const generateSequence = useCallback(() => {
     const types: SequenceType[] = ['arithmetic', 'geometric', 'quadratic'];
     const type = types[Math.floor(Math.random() * types.length)];
     setSequenceType(type);
@@ -26,7 +25,7 @@ export default function NumberSequence() {
     const length = Math.max(baseLength, 4);
     
     let newSequence: number[] = [];
-    let start = Math.floor(Math.random() * 20) + 1;
+    const start = Math.floor(Math.random() * 20) + 1;
 
     switch(type) {
       case 'arithmetic':
@@ -50,7 +49,7 @@ export default function NumberSequence() {
     setSequence(newSequence.slice(0, -1));
     setIsCorrect(null);
     setUserAnswer('');
-  };
+  }, [level]);
 
   const validateAnswer = (e: React.FormEvent) => {
     e.preventDefault();
@@ -109,7 +108,7 @@ export default function NumberSequence() {
 
   useEffect(() => {
     generateSequence();
-  }, [level]);
+  }, [generateSequence]);
 
   return (
     <div className="min-h-screen p-8 bg-white bg-gray-50">
