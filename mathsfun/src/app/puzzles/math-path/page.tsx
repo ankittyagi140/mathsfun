@@ -47,7 +47,6 @@ const MathPathFinder = () => {
     setGrid(newGrid);
     setSelectedPath([]);
     setHasWon(false);
-    setHintsRemaining(3);
   }, []);
 
   const findValidSolution = (grid: CellType[][]) => {

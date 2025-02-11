@@ -2,15 +2,13 @@
 import { CheckCircle2, AlertCircle, X } from 'lucide-react';
 import { useEffect } from 'react';
 
-export default function Snack({
-  message,
-  type,
-  onClose
-}: {
+interface SnackProps {
   message: string;
   type: 'success' | 'error';
   onClose: () => void;
-}) {
+}
+
+export default function Snack({ message, type, onClose }: SnackProps) {
   useEffect(() => {
     const timer = setTimeout(onClose, 5000);
     return () => clearTimeout(timer);

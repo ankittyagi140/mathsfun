@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import { useEffect, useState, useMemo } from 'react';
 import { Bubblegum_Sans } from 'next/font/google';
-import { getAuth, onAuthStateChanged, signOut } from 'firebase/auth';
-import { app } from '@/firebase/firebase-config'
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebase/firebase-config'
 import Snack from './Snack';
 import Loader from './Loader';
 import { useRouter } from 'next/navigation';
@@ -13,29 +13,30 @@ import { RootState, AppDispatch } from '@/store/store';
 import { checkAuthStatus, signOutUser } from '@/store/authSlice';
 import Image from 'next/image';
 
+
 const bubblegum = Bubblegum_Sans({ subsets: ['latin'], weight: '400' });
 
 const Header = () => {
-  const [hasMounted, setHasMounted] = useState(false);
+
   const [kidIcon, setKidIcon] = useState('👦'); // Default emoji for SSR
-  const kidEmojis = useMemo(() => ['👦', '👧', '🧒', '��🏽', '👧🏾'], []);
+  const kidEmojis = useMemo(() => ['👦', '👧', '🧒', '🏽', '👧🏾'], []);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const auth = typeof window !== 'undefined' ? getAuth(app) : null;
   const router = useRouter();
   const dispatch = useDispatch<AppDispatch>();
   const { user, loading, isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   useEffect(() => {
-    setHasMounted(true);
-    if (auth) {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        setIsLoggedIn(!!user);
-      });
-      return () => unsubscribe();
-    }
-  }, [auth]);
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     // This will only run on client side after hydration
@@ -57,7 +58,7 @@ const Header = () => {
   const getInitials = () => {
     if (typeof window === 'undefined') return 'Guest';
     const user = auth?.currentUser;
-    return user?.email?.split('@').map(n => n[0]).join('').toUpperCase() || 'Guest';
+    return user?.email?.slice(0, 2).toUpperCase() || 'Guest';
   };
   const handleLogin = () => {
     router.push('/login');
@@ -77,33 +78,6 @@ const Header = () => {
     }
   };
 
-  if (!hasMounted) {
-    return (
-      <header className="bg-yellow-500 shadow-sm sticky top-0 z-50">
-        <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16 items-center">
-            <Link href="/" className="flex items-center">
-              <Image 
-                src="/maths2fun.png"
-                alt="maths2fun Logo"
-                width={120}
-                height={40}
-              />
-              <span className={`text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
-                Maths2Fun
-              </span>
-            </Link>
-            <div className="flex items-center gap-8">
-              <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-green-600 transition-colors">
-                Loading...
-              </button>
-            </div>
-          </div>
-        </nav>
-      </header>
-    );
-  }
-
   return (
     <header className="bg-yellow-500 shadow-sm sticky top-0 z-50">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -112,8 +86,9 @@ const Header = () => {
             <Image 
               src="/maths2fun.png"
               alt="maths2fun Logo"
-              width={120}
+              width={60}
               height={40}
+              priority
             />
             <span className={`text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
               Maths2Fun

@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
-import Link from 'next/link';
 import Popup from '@/components/Popup';
 
 type Step = {
@@ -20,28 +19,20 @@ const MathCombination = () => {
   const [operators, setOperators] = useState<string[]>(['+', '+', '+']);
   const [showError, setShowError] = useState(false);
   const steps: Step[] = [];
-  const generateSolvableGame = useCallback(() => {
-    const MAX_ATTEMPTS = 100;
-    let attempts = 0;
 
-
+  const generateAllOperatorCombinations = useCallback(() => {
+    const operators = ['+', '-', '×', '÷'];
+    const combinations: string[][] = [];
     
-    while (attempts < MAX_ATTEMPTS) {
-      const newNumbers = Array.from({length: 4}, () => Math.floor(Math.random() * 9) + 1);
-      const newTarget = Math.floor(Math.random() * 50) + 10;
-      
-      if (hasSolution(newNumbers, newTarget)) {
-        return { newNumbers, newTarget };
+    for (let i = 0; i < operators.length; i++) {
+      for (let j = 0; j < operators.length; j++) {
+        for (let k = 0; k < operators.length; k++) {
+          combinations.push([operators[i], operators[j], operators[k]]);
+        }
       }
-      attempts++;
     }
-    
-    // Fallback to guaranteed solvable combination
-    return { 
-      newNumbers: [6, 3, 2, 4], 
-      newTarget: 24 
-    };
-  }, [hasSolution]);
+    return combinations;
+  }, []);
 
   const hasSolution = useCallback((numbers: number[], target: number) => {
     const operatorCombinations = generateAllOperatorCombinations();
@@ -61,19 +52,26 @@ const MathCombination = () => {
     });
   }, [generateAllOperatorCombinations]);
 
-  const generateAllOperatorCombinations = useCallback(() => {
-    const operators = ['+', '-', '×', '÷'];
-    const combinations: string[][] = [];
-    
-    for (let i = 0; i < operators.length; i++) {
-      for (let j = 0; j < operators.length; j++) {
-        for (let k = 0; k < operators.length; k++) {
-          combinations.push([operators[i], operators[j], operators[k]]);
-        }
+  const generateSolvableGame = useCallback(() => {
+    const MAX_ATTEMPTS = 100;
+    let attempts = 0;
+
+    while (attempts < MAX_ATTEMPTS) {
+      const newNumbers = Array.from({length: 4}, () => Math.floor(Math.random() * 9) + 1);
+      const newTarget = Math.floor(Math.random() * 50) + 10;
+      
+      if (hasSolution(newNumbers, newTarget)) {
+        return { newNumbers, newTarget };
       }
+      attempts++;
     }
-    return combinations;
-  }, []);
+    
+    // Fallback to guaranteed solvable combination
+    return { 
+      newNumbers: [6, 3, 2, 4], 
+      newTarget: 24 
+    };
+  }, [hasSolution]);
 
   const generateNewGame = useCallback(() => {
     const { newNumbers, newTarget } = generateSolvableGame();
@@ -98,13 +96,18 @@ const MathCombination = () => {
     return () => clearInterval(interval);
   }, [isActive, isCorrect]);
 
+  useEffect(() => {
+    if (!hasSolution(numbers, target)) {
+      setShowError(true);
+      generateNewGame();
+    }
+  }, [hasSolution, numbers, target, generateNewGame]);
+
   const handleOperatorChange = (index: number, value: string) => {
     const newOperators = [...operators];
     newOperators[index] = value;
     setOperators(newOperators);
   };
-
-
 
   const validateSolution = () => {
     try {
@@ -214,12 +217,7 @@ const MathCombination = () => {
             >
               New Game
             </button>
-            <Link
-              href="/puzzles"
-              className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 text-center"
-            >
-              ← Back to Puzzles
-            </Link>
+           
           </div>
         </div>
 

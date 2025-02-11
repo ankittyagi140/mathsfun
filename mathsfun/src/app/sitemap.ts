@@ -1,5 +1,7 @@
+import { allPuzzleApps } from '@/utils/allPuzzleApps';
+
 export default async function sitemap() {
-  const quizzes = await getAllQuizzes();
+  const quizzes = allPuzzleApps;
   
   return [
     {
@@ -7,9 +9,8 @@ export default async function sitemap() {
       lastModified: new Date(),
     },
     ...quizzes.map(quiz => ({
-      url: `https://maths2fun.com/quizzes/${quiz.slug}`,
-      lastModified: quiz.updatedAt,
+      url: `https://maths2fun.com/quizzes/${encodeURIComponent(quiz.name)}`,
+      lastModified: new Date(),
     })),
-
   ];
 } 
