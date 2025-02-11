@@ -33,10 +33,10 @@ export default function ContactForm() {
       }
 
       setSnack({ message: 'Message sent successfully!', type: 'success' });
-    } catch (error: Error) {
-      setSnack({ 
-        message: error.message || 'Failed to send message', 
-        type: 'error' 
+    } catch (error: unknown) {
+      setSnack({
+        message: error instanceof Error ? error.message : 'Failed to send message',
+        type: 'error'
       });
     } finally {
       setIsSubmitting(false);

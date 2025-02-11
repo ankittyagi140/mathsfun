@@ -1,19 +1,25 @@
-import { configureStore } from '@reduxjs/toolkit';
-import appsReducer from './appsSlice';
+import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
 import authReducer from './authSlice';
+import appsReducer from './appsSlice';
 
-const makeStore = () => configureStore({
+export const store = configureStore({
   reducer: {
+    auth: authReducer,
     apps: appsReducer,
-    auth: authReducer
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({
     serializableCheck: false
   }),
-  devTools: true
 });
 
-export type AppStore = ReturnType<typeof makeStore>;
-export type RootState = ReturnType<AppStore['getState']>;
-export type AppDispatch = AppStore['dispatch'];
-export const store = makeStore(); 
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+export type AppThunk<ReturnType = void> = ThunkAction<
+  ReturnType,
+  RootState,
+  unknown,
+  Action<string>
+>;
+
+export const useAppDispatch = () => useDispatch<AppDispatch>(); 

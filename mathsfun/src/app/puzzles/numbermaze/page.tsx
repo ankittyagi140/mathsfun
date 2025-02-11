@@ -2,7 +2,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Confetti from 'react-confetti';
-import Link from 'next/link';
 import Popup from '@/components/Popup';
 import { Howl } from 'howler';
 
@@ -20,7 +19,7 @@ const NumberMaze = () => {
       Array(size).fill({ value: 0, isStart: false, isEnd: false, isPath: false })
     );
   });
-  const [currentPath, setCurrentPath] = useState<[number, number][]>([]);
+  const [currentPath, setCurrentPath] = useState<[number, number][]>([[0, 0]]);
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [moves, setMoves] = useState(0);
   const [showHelp, setShowHelp] = useState(false);
@@ -94,7 +93,7 @@ const NumberMaze = () => {
     const cellValue = grid[lastRow][lastCol].value;
 
     if (distance === cellValue) {
-      const newPath = [...currentPath, [row, col]];
+      const newPath: [number, number][] = [...currentPath, [row, col]];
       setCurrentPath(newPath);
       setMoves(moves + 1);
       playSound('move');
@@ -196,12 +195,7 @@ const NumberMaze = () => {
             >
               🔄 New Game
             </button>
-            <Link
-              href="/puzzles"
-              className="px-6 py-2 bg-gray-200 text-gray-700 rounded-full hover:bg-gray-300 text-center"
-            >
-              ← Back to Puzzles
-            </Link>
+          
           </div>
         </div>
 

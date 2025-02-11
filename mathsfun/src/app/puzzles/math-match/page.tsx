@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import Confetti from 'react-confetti';
 import Link from 'next/link';
 import Popup from '@/components/Popup';
@@ -19,14 +19,14 @@ const MathMatch = () => {
   const [isInteractable, setIsInteractable] = useState(true);
   const [gameWon, setGameWon] = useState(false);
 
-  const numberPairs = [
+  const numberPairs = useMemo(() => [
     { number: '12', expression: '3×4' },
     { number: '8', expression: '2³' },
     { number: '15', expression: '30÷2' },
     { number: '25', expression: '5²' },
     { number: '18', expression: '9+9' },
     { number: '10', expression: '√100' },
-  ];
+  ], []);
 
   const initializeGame = useCallback(() => {
     const generatedCards = numberPairs

@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Confetti from 'react-confetti';
-import { generateFibonacciSequence } from '@/lib/math-utils';
 import { InfoIcon, LightbulbIcon } from 'lucide-react';
 
 export default function FibonacciQuest() {
@@ -13,23 +12,22 @@ export default function FibonacciQuest() {
   const [showHint, setShowHint] = useState(false);
   const [showInstructions, setShowInstructions] = useState(true);
 
-  const generateNewSequence = useCallback(() => {
-    const baseLength = 5 + level;
-    const fullSequence = generateFibonacciSequence(baseLength);
-    const hiddenIndex = Math.floor(Math.random() * (baseLength - 2)) + 2;
-    
-    const puzzleSequence = fullSequence.map((num, index) => 
-      index === hiddenIndex ? null : num
-    );
-    
+  const generatePuzzle = useCallback(() => {
+    const puzzleSequence = Array(5)
+      .fill(null)
+      .map((_, i) => {
+        if (i < 2) return Math.floor(Math.random() * 5) + 1;
+        return null; // Mark missing numbers as null
+      }) as number[]; // Add type assertion here
+
     setSequence(puzzleSequence);
     setUserInput('');
     setIsCorrect(null);
-  }, [level]);
+  }, []);
 
   useEffect(() => {
-    generateNewSequence();
-  }, [generateNewSequence]);
+    generatePuzzle();
+  }, [generatePuzzle]);
 
   const validateAnswer = (e: React.FormEvent) => {
     e.preventDefault();
@@ -144,7 +142,7 @@ export default function FibonacciQuest() {
               Need a hint?
             </button>
             <button
-              onClick={generateNewSequence}
+              onClick={generatePuzzle}
               className="px-4 py-2 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
             >
               Skip Puzzle

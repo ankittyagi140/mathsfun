@@ -189,6 +189,7 @@ const handleAppClick = (app: App) => () => {
                         {myApps.map((app) => (
                           <AppCard
                             key={app.id}
+                            id={app.id}
                             title={app.name}
                             description={app.description}
                             href={app.path}

@@ -30,7 +30,6 @@ export const SnackbarProvider = ({ children }: { children: React.ReactNode }) =>
       <Snack
         message={snack?.message || ''}
         type={snack?.type || 'success'}
-        isVisible={!!snack}
         onClose={() => setSnack(null)}
       />
     </SnackbarContext.Provider>

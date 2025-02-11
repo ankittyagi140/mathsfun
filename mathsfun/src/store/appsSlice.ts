@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AppDispatch } from './store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 interface App {
@@ -7,33 +6,30 @@ interface App {
   title: string;
   description: string;
   href: string;
+  icon: string;
 }
 
 interface AppsState {
   myApps: App[];
+  loading: boolean;
 }
 
-const loadFromLocalStorage = (): App[] => {
-  try {
-    const stored = localStorage.getItem('myApps');
-    return stored ? JSON.parse(stored) : [];
-  } catch (error) {
-    console.error('Error loading apps from localStorage:', error);
-    return [];
-  }
-};
 
 const initialState: AppsState = {
   myApps: [],
+  loading: true,
 };
 
-// Rename the hydrate action to avoid conflicts
-export const hydrateApps = () => {
-  return (dispatch: AppDispatch) => {
-    const savedApps = loadFromLocalStorage();
-    dispatch(setApps(savedApps));
-  };
-};
+// Add hydration thunk
+export const hydrateApps = createAsyncThunk(
+  'apps/hydrate',
+  async (_, { dispatch }) => {
+    const savedApps = localStorage.getItem('myApps');
+    if (savedApps) {
+      dispatch(setApps(JSON.parse(savedApps)));
+    }
+  }
+);
 
 const appsSlice = createSlice({
   name: 'apps',
@@ -69,6 +65,11 @@ const appsSlice = createSlice({
       console.log('Updated apps in localStorage after removal');
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(hydrateApps.fulfilled, (state) => {
+      state.loading = false;
+    });
+  }
 });
 
 // Update the exports

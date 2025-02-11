@@ -50,42 +50,37 @@ const CrosswordPuzzle = () => {
   const [grid, setGrid] = useState<Cell[][]>(initialGrid);
   const [selectedCell, setSelectedCell] = useState<{row: number; col: number} | null>(null);
   const [showHelp, setShowHelp] = useState(false);
-  const [direction, setDirection] = useState<'across'|'down'>('across');
+
+  const moveToNextCell = useCallback(() => {
+    if (!selectedCell) return;
+    const { row, col } = selectedCell;
+    const nextCol = (col + 1) % grid[0].length;
+    const nextRow = nextCol === 0 ? (row + 1) % grid.length : row;
+    setSelectedCell({ row: nextRow, col: nextCol });
+  }, [selectedCell, grid]);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!selectedCell) return;
+      const { row, col } = selectedCell;
+      const newGrid = [...grid];
+      const currentCell = newGrid[row][col];
+      
+      if (e.key.match(/^[a-z]$/i)) {
+        currentCell.letter = e.key.toUpperCase();
+        setGrid(newGrid);
+        moveToNextCell();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [selectedCell, grid, moveToNextCell]);
 
   const handleCellClick = (row: number, col: number) => {
     if (grid[row][col].isBlack) return;
     setSelectedCell({ row, col });
   };
-
-  const handleKeyPress = useCallback((e: KeyboardEvent) => {
-    if (!selectedCell) return;
-    
-    const { row, col } = selectedCell;
-    const newGrid = [...grid];
-    
-    if (e.key.match(/^[a-z]$/i)) {
-      newGrid[row][col].letter = e.key.toUpperCase();
-      setGrid(newGrid);
-      moveToNextCell();
-    }
-  }, [selectedCell, grid, moveToNextCell]);
-
-  const moveToNextCell = useCallback(() => {
-    if (!selectedCell) return;
-    
-    const { row, col } = selectedCell;
-       
-    if (direction === 'across' && col < grid[0].length - 1) {
-      setSelectedCell({ row, col: col + 1 });
-    } else if (direction === 'down' && row < grid.length - 1) {
-      setSelectedCell({ row: row + 1, col });
-    }
-  }, [selectedCell, direction, grid]);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [selectedCell, direction, handleKeyPress]);
 
   const checkCompletion = () => {
     return grid.every(row => 
@@ -130,7 +125,6 @@ const CrosswordPuzzle = () => {
                       ? 'ring-4 ring-blue-400' : ''}
                   `}
                   onClick={() => handleCellClick(rowIndex, colIndex)}
-                  onDoubleClick={() => setDirection(prev => prev === 'across' ? 'down' : 'across')}
                 >
                   {cell.number && (
                     <span className="absolute top-0 left-0 text-xs p-0.5">

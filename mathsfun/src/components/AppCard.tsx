@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { RootState } from '@/store/store';
 import { addApp, removeApp } from '@/store/appsSlice';
 import { useSnackbar } from '@/context/SnackbarContext';
 
@@ -11,19 +11,27 @@ interface AppCardProps {
   icon?: React.ReactNode;
   href: string;
   id: string;
+  isAdded?: boolean;
+  onRemove?: (appId: string) => void;
 }
 
-export default function AppCard({ title, description, icon, href, id }: AppCardProps) {
+export default function AppCard({ title, description, icon, href, id, isAdded, onRemove }: AppCardProps) {
   const dispatch = useDispatch();
-  const myApps = useSelector((state: RootState) => state.apps.myApps);
-  const isAdded = myApps.some(app => app.id === id);
   const { showSnackbar } = useSnackbar();
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
 
   const handleAddRemove = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (isAdded) {
+    // Check if user is authenticated
+    if (!isAuthenticated) {
+      showSnackbar('Please login to add apps to My Apps', 'error');
+      return;
+    }
+
+    if (isAdded && onRemove) {
+      onRemove(id);
       dispatch(removeApp(id));
       showSnackbar(`${title} removed from My Apps`, 'success');
     } else {
@@ -32,7 +40,7 @@ export default function AppCard({ title, description, icon, href, id }: AppCardP
         title: title,
         description: description,
         href: href,
-        icon: icon
+        icon: typeof icon === 'string' ? icon : '⭐'
       }));
       showSnackbar(`${title} added to My Apps`, 'success');
     }
