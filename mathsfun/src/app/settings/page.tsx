@@ -12,7 +12,7 @@ import Loader from '@/components/Loader';
 import Breadcrumb from "../../components/Breadcrumb";
 import Sidebar from "../../components/Sidebar";
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState } from '@/redux/store/store';
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
 

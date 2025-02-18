@@ -1,8 +1,8 @@
 'use client'
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
-import { addApp, removeApp } from '@/store/appsSlice';
+import { RootState } from '@/redux/store/store';
+import { addApp, removeApp } from '@/redux/slices/appsSlice';
 import { useSnackbar } from '@/context/SnackbarContext';
 
 interface AppCardProps {

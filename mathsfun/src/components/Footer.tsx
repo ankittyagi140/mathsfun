@@ -51,8 +51,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <a href="mailto:support@maths4fun.com" className="text-gray-600 hover:text-yellow-600">
-                  support@maths4fun.com
+                <a href="mailto:support@maths2fun.com" className="text-gray-600 hover:text-yellow-600">
+                  support@maths2fun.com
                 </a>
               </li>
             </ul>
@@ -61,7 +61,7 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-gray-200 text-center">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} maths4fun. All rights reserved.
+            © {new Date().getFullYear()} maths2fun. All rights reserved.
           </p>
         </div>
       </div>

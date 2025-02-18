@@ -9,8 +9,8 @@ import Snack from './Snack';
 import Loader from './Loader';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState, AppDispatch } from '@/store/store';
-import { checkAuthStatus, signOutUser } from '@/store/authSlice';
+import { RootState, AppDispatch } from '@/redux/store/store';
+import { checkAuthStatus, signOutUser } from '@/redux/slices/authSlice';
 import Image from 'next/image';
 
 

@@ -32,7 +32,7 @@ export default function Sidebar() {
   return (
     <div className="relative">
       <aside 
-        className={`${isOpen ? 'w-64' : 'w-16'} transition-all duration-300 ease-in-out p-2 rounded-lg border`}
+        className={`${isOpen ? 'w-64' : 'w-16'} transition-all duration-300 ease-in-out p-2 rounded-lg border position-sticky top-74`}
       >
         {links.map((link) => {
           const Icon = link.icon;

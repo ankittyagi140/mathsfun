@@ -1,9 +1,9 @@
 'use client';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState } from '@/redux/store/store';
 import AppCard from '@/components/AppCard';
 import Sidebar from '@/components/Sidebar';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Snack from '@/components/Snack';
 import Breadcrumb from '@/components/Breadcrumb';
 import { Lock } from 'lucide-react';
@@ -18,7 +18,9 @@ export default function MyAppsPage() {
     { label: 'Home', path: '/' },
     { label: 'My Apps', path: '/myapps' }
   ];
-
+useEffect(()=>{
+  console.log(isAuthenticated);
+})
   return (
     <div className="min-h-screen p-8 bg-white p-8 bg-white">
       <main className="flex-1 w-full">

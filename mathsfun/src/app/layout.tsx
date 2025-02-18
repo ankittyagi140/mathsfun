@@ -49,10 +49,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <link
           rel="icon"
-          href="/maths4fun.png"
+          href="/maths2fun.png"
           type="image/png"
           sizes="512x512"
         />
+        <meta name="google-site-verification" content="zLtGgfAeZHTInXu9ONOVqwRsiz_AdOy1yZPcMNcKDqc" />
       </head>
       <body className="bg-yellow-50">
         <ThemeProvider>
