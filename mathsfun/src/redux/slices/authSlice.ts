@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { auth } from '../firebase/firebase-config';
+import { auth } from '../../firebase/firebase-config';
 import { User, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 
 interface AuthState {

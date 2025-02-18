@@ -7,7 +7,7 @@ import { Medal, Trophy, Star, Target, Crown, Zap, BookOpen, Lock } from 'lucide-
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store/store';
+import { RootState } from '@/redux/store/store';
 import type { LucideIcon } from 'lucide-react';
 
 interface Achievement {
