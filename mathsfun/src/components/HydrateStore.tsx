@@ -7,7 +7,6 @@ export default function HydrateStore() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    console.log('Hydrating store from localStorage');
     dispatch(hydrateApps());
   }, [dispatch]);
 

@@ -2,10 +2,8 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/store';
 import AppCard from '@/components/AppCard';
-import Sidebar from '@/components/Sidebar';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Snack from '@/components/Snack';
-import Breadcrumb from '@/components/Breadcrumb';
 import { Lock } from 'lucide-react';
 import Link from 'next/link';
 
@@ -14,22 +12,14 @@ export default function MyAppsPage() {
   const myApps = useSelector((state: RootState) => state.apps.myApps);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'My Apps', path: '/myapps' }
-  ];
-useEffect(()=>{
-  console.log(isAuthenticated);
-})
+
   return (
     <div className="min-h-screen p-8 bg-white p-8 bg-white">
       <main className="flex-1 w-full">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
-            <Sidebar />
             <div className="flex-1">
               <div className="mb-8">
-                <Breadcrumb items={breadcrumbItems} />
                 <h1 className="text-2xl font-bold">My Applications</h1>
               </div>
               {

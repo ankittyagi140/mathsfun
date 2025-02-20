@@ -9,8 +9,6 @@ import {
 } from 'firebase/auth';
 import Snack from '@/components/Snack';
 import Loader from '@/components/Loader';
-import Breadcrumb from "../../components/Breadcrumb";
-import Sidebar from "../../components/Sidebar";
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store/store';
 import Link from 'next/link';
@@ -73,20 +71,15 @@ export default function SettingsPage() {
     }
   };
 
-  const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Settings', path: '/settings' }
-  ];
+  
 
   return (
     <div className="min-h-screen p-8 bg-white p-8 bg-white">
       <main className="flex-1 w-full">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
-            <Sidebar />
             <div className="flex-1">
               <div className="mb-8">
-                <Breadcrumb items={breadcrumbItems} />
                 <h1 className="text-2xl font-bold">Settings</h1>
               </div>
               {isAuthenticated ? <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

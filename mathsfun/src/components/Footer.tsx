@@ -12,12 +12,12 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">About Us</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-gray-600 hover:text-yellow-600">
+                <Link href="/about" className="text-gray-600 hover:text-blue-600">
                   Our Mission
                 </Link>
               </li>
               {/* <li>
-                <Link href="/team" className="text-gray-600 hover:text-yellow-600">
+                <Link href="/team" className="text-gray-600 hover:text-blue-600">
                   Team
                 </Link>
               </li> */}
@@ -29,12 +29,12 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Legal</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/privacy" className="text-gray-600 hover:text-yellow-600">
+                <Link href="/privacy" className="text-gray-600 hover:text-blue-600">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-gray-600 hover:text-yellow-600">
+                <Link href="/terms" className="text-gray-600 hover:text-blue-600">
                   Terms of Service
                 </Link>
               </li>
@@ -46,14 +46,17 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-gray-800 mb-4">Contact</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/contact" className="text-gray-600 hover:text-yellow-600">
+                <Link href="/contact" className="text-gray-600 hover:text-blue-600">
                   Contact Form
                 </Link>
               </li>
               <li>
-                <a href="mailto:support@maths2fun.com" className="text-gray-600 hover:text-yellow-600">
+                <a href="mailto:support@maths2fun.com" className="text-gray-600 hover:text-blue-600">
                   support@maths2fun.com
                 </a>
+              </li>
+              <li>
+                <Link href={"/help"} className='text-gray-600 hover:text-blue-600'>Help & Support</Link>
               </li>
             </ul>
           </div>

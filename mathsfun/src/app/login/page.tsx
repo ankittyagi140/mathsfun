@@ -23,7 +23,7 @@ export default function LoginPage() {
       await setPersistence(auth, browserSessionPersistence);
       await signInWithEmailAndPassword(auth, email, password);
       setSnack({ message: 'Login successful!', type: 'success' });
-      setTimeout(() => router.push('/'), 1500);
+      setTimeout(() => window.location.href = '/', 1500);
     } catch (error) {
       const err = error as Error;
       const errorMessage = err.message.includes('user-not-found') 

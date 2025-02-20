@@ -40,29 +40,21 @@ const appsSlice = createSlice({
     },
     addApp: (state, action: PayloadAction<App>) => {
       if (!action.payload.id) {
-        console.error('Cannot add app without ID');
         return;
       }
-      console.log('Redux addApp reducer called with:', action.payload);
       const exists = state.myApps.some(app => app.id === action.payload.id);
-      console.log('App already exists:', exists);
       
       if (!exists) {
-        console.log('Adding new app to state');
         state.myApps.push(action.payload);
         localStorage.setItem('myApps', JSON.stringify(state.myApps));
-        console.log('Updated apps in localStorage');
       }
     },
     removeApp: (state, action: PayloadAction<string>) => {
-      console.log('Redux removeApp reducer called for ID:', action.payload);
       state.myApps = state.myApps.filter(app => {
         const match = app.id !== action.payload;
-        console.log(`App ${app.id} ${match ? 'remains' : 'removed'}`);
         return match;
       });
       localStorage.setItem('myApps', JSON.stringify(state.myApps));
-      console.log('Updated apps in localStorage after removal');
     },
   },
   extraReducers: (builder) => {

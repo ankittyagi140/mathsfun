@@ -1,8 +1,6 @@
 'use client';
 
 
-import Sidebar from "../../components/Sidebar";
-import Breadcrumb from "../../components/Breadcrumb";
 import { Medal, Trophy, Star, Target, Crown, Zap, BookOpen, Lock } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
@@ -86,10 +84,7 @@ const achievements: Achievement[] = [
 
 export default function AchievementsPage() {
   const [filter, setFilter] = useState<string>('all');
-  const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Achievements', path: '/achievements' }
-  ];
+  
   const {  isAuthenticated} = useSelector((state: RootState) => state.auth);
   const filteredAchievements = filter === 'all'
     ? achievements
@@ -104,10 +99,8 @@ export default function AchievementsPage() {
       <main className="flex-1 w-full">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
-            <Sidebar />
             <div className="flex-1">
               <div className="mb-8">
-                <Breadcrumb items={breadcrumbItems} />
                 <h1 className={`text-2xl font-bold `}>Achievements</h1>
               </div>
 

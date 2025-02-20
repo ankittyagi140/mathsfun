@@ -1,7 +1,5 @@
 'use client';
 
-import Sidebar from "../../components/Sidebar";
-import Breadcrumb from "../../components/Breadcrumb";
 import { Mail, FileText, Plus, Minus, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
 
@@ -51,10 +49,6 @@ const resources = [
 export default function HelpPage() {
   const [openFAQs, setOpenFAQs] = useState<number[]>([]);
   
-  const breadcrumbItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Help & Support', path: '/help' }
-  ];
 
   const toggleFAQ = (index: number) => {
     setOpenFAQs(prev => 
@@ -71,10 +65,8 @@ export default function HelpPage() {
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="flex gap-6">
-            <Sidebar />
             <div className="flex-1">
               <div className="mb-8">
-                <Breadcrumb items={breadcrumbItems} />
                 <h1 className={`text-2xl font-bold`}>Help & Support</h1>
               </div>
 

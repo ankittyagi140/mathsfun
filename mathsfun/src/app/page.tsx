@@ -1,8 +1,5 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Sidebar from "../components/Sidebar";
-import { useSidebar } from "../context/Sidebar";
-import Breadcrumb from "../components/Breadcrumb";
 import AppCard from '../components/AppCard';
 import { Search } from 'lucide-react';
 import {allPuzzleApps} from '../utils/allPuzzleApps';
@@ -54,7 +51,6 @@ const AppGrid = ({
 
 
 const Home = () => {
-  const { activeView } = useSidebar();
   const [addedAppIds, setAddedAppIds] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchFocused, setIsSearchFocused] = useState(false);
@@ -69,20 +65,7 @@ const Home = () => {
     localStorage.setItem('addedAppIds', JSON.stringify(addedAppIds));
   }, [addedAppIds]);
 
-  const handleRemoveApp = (appId: string) => {
-    setAddedAppIds(prev => prev.filter(id => id !== appId));
-  };
-
-
-  const getBreadcrumbItems = () => {
-    const items = [{ label: 'Home', path: '/' }];
-    if (activeView === 'dashboard') {
-      items.push({ label: 'Dashboard', path: '/?view=dashboard' });
-    } else if (activeView === 'myapps') {
-      items.push({ label: 'My Apps', path: '/?view=myapps' });
-    }
-    return items;
-  };
+ 
 
 const handleAppClick = (app: App) => () => {
  router.push(app.path);}
@@ -100,22 +83,17 @@ const handleAppClick = (app: App) => () => {
           <div className="max-w-7xl mx-auto px-4 py-6">
 
             <div className="flex gap-6">
-              <Sidebar />
               <div className="flex-1">
                 <div className="mb-8">
-                  <Breadcrumb items={getBreadcrumbItems()} />
                   <h1 className={`text-2xl font-bold`}>
-                    {activeView === 'dashboard' ? 'Dashboard' : 'My Apps'}
                   </h1>
                 </div>
-
-                {activeView === 'dashboard' ? (
                   <>
                     <header className="mb-8">
                       <div className="max-w-7xl mx-auto px-4 py-6">
                         <div className="flex justify-between items-center">
                          
-                          <div className="relative w-96">
+                          <div className="relative w-full">
                             <div className="flex items-center border rounded-lg px-4 py-2">
                               <Search className="h-5 w-5 text-gray-400" />
                               <input
@@ -171,41 +149,6 @@ const handleAppClick = (app: App) => () => {
                       />
                     </section>
                   </>
-                ) : (
-                  <section className="mb-12">
-                    <div className="flex justify-between items-center mb-6">
-                      <h2 className="text-3xl font-bold">⭐ My Apps</h2>
-                      {myApps.length > 0 && (
-                        <button
-                          onClick={() => setAddedAppIds([])}
-                          className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 text-sm"
-                        >
-                          Remove All
-                        </button>
-                      )}
-                    </div>
-                    {myApps.length > 0 ? (
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {myApps.map((app) => (
-                          <AppCard
-                            key={app.id}
-                            id={app.id}
-                            title={app.name}
-                            description={app.description}
-                            href={app.path}
-                            icon={app.icon}
-                            onRemove={handleRemoveApp}
-                            isAdded={true}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12 bg-gray-50 rounded-xl">
-                        <p className="text-gray-500">No apps added yet. Browse below!</p>
-                      </div>
-                    )}
-                  </section>
-                )}
               </div>
             </div>
           </div>

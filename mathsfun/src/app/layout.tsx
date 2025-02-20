@@ -6,7 +6,6 @@ import Footer from '../components/Footer';
 import './fonts.css';
 import HydrateStore from '@/components/HydrateStore';
 import { SnackbarProvider } from '@/context/SnackbarContext';
-import { SidebarProvider } from '@/context/Sidebar';
 import { ThemeProvider } from '@/context/ThemeContext';
 
 // Metadata needs to be in a separate file for app router
@@ -59,12 +58,10 @@ export default function RootLayout({
         <ThemeProvider>
           <Providers>
             <SnackbarProvider>
-              <SidebarProvider>
                 <HydrateStore />
                 <Header />
                 <main className="min-h-screen p-8 bg-white">{children}</main>
                 <Footer />
-              </SidebarProvider>
             </SnackbarProvider>
           </Providers>
         </ThemeProvider>
