@@ -13,6 +13,7 @@ interface AppCardProps {
   id: string;
   isAdded?: boolean;
   onRemove?: (appId: string) => void;
+  className?: string;
 }
 
 export default function AppCard({ title, description, icon, href, id, isAdded, onRemove }: AppCardProps) {
@@ -49,8 +50,7 @@ export default function AppCard({ title, description, icon, href, id, isAdded, o
   return (
     <Link
       href={href}
-      className="group relative bg-white rounded-xl shadow-lg hover:shadow-xl hover:bg-yellow-100 transition-all duration-300 ease-out border border-yellow-300 overflow-hidden transform hover:-translate-y-1.5"
-    >
+      className="group relative bg-white/30 backdrop-blur-lg rounded-xl shadow-lg hover:shadow-xl hover:bg-yellow-100/40 transition-all duration-300 ease-out border border-yellow-300 overflow-hidden transform hover:-translate-y-1.5">
       <button
         onClick={handleAddRemove}
 
