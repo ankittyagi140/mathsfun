@@ -8,6 +8,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        'custom': '880px', // Define a custom breakpoint
+      },
       animation: {
         'fade-in-up': 'fadeInUp 0.3s ease-out',
         spin: 'spin 1.2s linear infinite',

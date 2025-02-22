@@ -44,7 +44,7 @@ export default function LoginPage() {
     try {
       await signInWithPopup(auth, provider);
       setSnack({ message: 'Google login successful!', type: 'success' });
-      setTimeout(() => router.push('/dashboard'), 1500);
+      setTimeout(() => router.push('/'));
     } catch (error) {
       const err = error as Error;
       console.log(err.message);

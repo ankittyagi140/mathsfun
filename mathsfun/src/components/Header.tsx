@@ -83,7 +83,7 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-yellow-500 shadow-sm sticky top-0 z-50">
+    <header className="bg-yellow-500/50 shadow-sm sticky top-0 z-50 backdrop-blur-md">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link href="/" className="flex items-center">
@@ -100,7 +100,7 @@ const Header = () => {
             </span>
           </Link>
           
-          <div className="hidden md:flex">
+          <div className="hidden custom:flex">
             <SubHeader/>
           </div>
 
@@ -145,7 +145,7 @@ const Header = () => {
         </div>
       </nav>
 
-      <div className="md:hidden p-2 bg-yellow-400">
+      <div className="custom:hidden p-2 bg-yellow-400">
         <SubHeader/>
       </div>
 

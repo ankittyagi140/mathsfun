@@ -32,6 +32,25 @@ export const metadata: Metadata = {
     description: 'Engaging math education platform for all ages',
     images: ['/maths2fun-twitter.png'],
   },
+  alternates: {
+    canonical: 'https://maths2fun.com',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  verification: {
+    google: 'zLtGgfAeZHTInXu9ONOVqwRsiz_AdOy1yZPcMNcKDqc',
+  }
 };
 
 // Choose one of these fonts:

@@ -5,7 +5,8 @@ export const allPuzzleApps = [
       icon: '🧩',
       description: 'Fun number placement puzzle',
       category: 'Puzzles',
-      path: '/puzzles/sudoku'
+      path: '/puzzles/sudoku',
+      slug: 'sudoku'
     },
     {
       id: 'puzzle-2',
@@ -13,7 +14,8 @@ export const allPuzzleApps = [
       icon: '🔠',
       description: 'Word discovery game',
       category: 'Puzzles',
-      path: '/puzzles/crossword'
+      path: '/puzzles/crossword',
+      slug: 'crossword'
     },
     {
       id: 'puzzle-3',
@@ -21,7 +23,8 @@ export const allPuzzleApps = [
       icon: '🏰',
       description: 'Navigate through numerical challenges',
       category: 'Puzzles',
-      path: '/puzzles/numbermaze'
+      path: '/puzzles/numbermaze',
+      slug: 'numbermaze'
     },
     {
       id: 'puzzle-4',
@@ -29,7 +32,8 @@ export const allPuzzleApps = [
       icon: '🧮',
       description: 'Combine numbers to reach the target',
       category: 'Puzzles',
-      path: '/puzzles/math-combination'
+      path: '/puzzles/math-combination',
+      slug: 'math-combination'
     },
     {
       id: 'puzzle-6',
@@ -37,7 +41,8 @@ export const allPuzzleApps = [
       icon: '🛤️',
       description: 'Connect numbers and operators to reach target',
       category: 'Puzzles',
-      path: '/puzzles/math-path'
+      path: '/puzzles/math-path',
+      slug: 'math-path'
     },
     {
       id: 'puzzle-7',
@@ -45,7 +50,8 @@ export const allPuzzleApps = [
       icon: '🧙',
       description: 'Arrange numbers to match row/column sums',
       category: 'Puzzles',
-      path: '/puzzles/magic-square'
+      path: '/puzzles/magic-square',
+      slug: 'magic-square'
     },
     {
       id: 'puzzle-8',
@@ -53,7 +59,8 @@ export const allPuzzleApps = [
       icon: '🔢',
       description: 'Find prime numbers against the clock',
       category: 'Puzzles',
-      path: '/puzzles/prime-hunt'
+      path: '/puzzles/prime-hunt',
+      slug: 'prime-hunt'
     },
     {
       id: 'puzzle-9',
@@ -61,7 +68,8 @@ export const allPuzzleApps = [
       icon: '⚖️',
       description: 'Balance chemical equations through coefficients',
       category: 'Puzzles',
-      path: '/puzzles/equation-balancer'
+      path: '/puzzles/equation-balancer',
+      slug: 'equation-balancer'
     },
     {
       id: 'puzzle-10',
@@ -69,7 +77,8 @@ export const allPuzzleApps = [
       icon: '🔢',
       description: 'Complete Fibonacci sequences',
       category: 'Number-Based Puzzles',
-      path: '/puzzles/fibonacci-quest'
+      path: '/puzzles/fibonacci-quest',
+      slug: 'fibonacci-quest'
     },
     {
       id: 'puzzle-11',
@@ -77,6 +86,16 @@ export const allPuzzleApps = [
       icon: '🔣',
       description: 'Identify the next number in patterns',
       category: 'Number-Based Puzzles',
-      path: '/puzzles/number-sequence'
+      path: '/puzzles/number-sequence',
+      slug: 'number-sequence'
+    },
+    {
+      id: 'riddles',
+      name: 'Math Riddles',
+      icon: '🔢',
+      description: 'Solve mathematical riddles',
+      category: 'Puzzles',
+      path: '/puzzles/riddles',
+      slug: 'riddles'
     },
   ];
