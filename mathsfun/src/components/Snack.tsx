@@ -6,9 +6,13 @@ interface SnackProps {
   message: string;
   type: 'success' | 'error';
   onClose: () => void;
+  action?: {
+    label: string;
+    handler: () => void;
+  };
 }
 
-export default function Snack({ message, type, onClose }: SnackProps) {
+export default function Snack({ message, type, onClose, action }: SnackProps) {
   useEffect(() => {
     const timer = setTimeout(onClose, 5000);
     return () => clearTimeout(timer);
@@ -26,6 +30,14 @@ export default function Snack({ message, type, onClose }: SnackProps) {
         <AlertCircle className="h-5 w-5 text-red-600" />
       )}
       <span>{message}</span>
+      {action && (
+        <button 
+          onClick={action.handler}
+          className="px-2 py-1 bg-white bg-opacity-20 rounded hover:bg-opacity-30"
+        >
+          {action.label}
+        </button>
+      )}
       <button
         onClick={onClose}
         className="ml-2 text-gray-400 hover:text-gray-600 transition-colors"

@@ -4,6 +4,9 @@ import AppCard from '../components/AppCard';
 import { Search } from 'lucide-react';
 import { allPuzzleApps } from '../utils/allPuzzleApps';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import { motion, useAnimation } from 'framer-motion';
+import dynamic from 'next/dynamic';
 
 interface App {
   id: string;
@@ -48,7 +51,13 @@ const AppGrid = ({
   );
 };
 
-
+const FloatingEmojis = dynamic(
+  () => import('../components/FloatingEmojis'),
+  { 
+    ssr: false,
+    loading: () => null
+  }
+);
 
 const Home = () => {
   const [addedAppIds, setAddedAppIds] = useState<string[]>([]);
@@ -56,6 +65,7 @@ const Home = () => {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const router = useRouter();
   const searchRef = useRef<HTMLInputElement>(null);
+  const controls = useAnimation();
 
   useEffect(() => {
     const saved = localStorage.getItem('addedAppIds');
@@ -66,6 +76,18 @@ const Home = () => {
     localStorage.setItem('addedAppIds', JSON.stringify(addedAppIds));
   }, [addedAppIds]);
 
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      await controls.start({
+        scale: [1, 1.3, 0.9, 1.1, 1],
+        rotate: [0, 15, -15, 10, 0],
+        transition: { duration: 1, type: 'sprint' }
+      });
+    }, 15000);
+
+    return () => clearInterval(interval);
+  }, [controls]);
 
   const handleSearchClick = () => {
     if (searchRef.current) {
@@ -90,7 +112,30 @@ const Home = () => {
             <div className="flex gap-4 sm:gap-6">
               <div className="flex-1">
                 <>
-                  <header className="mb-6 sm:mb-8">
+                  <div className="mb-6 sm:mb-8">
+                    <div className="hover:scale-105 transition-transform duration-300 hover:-translate-y-1 will-change-transform">
+                      <motion.div
+                        animate={controls}
+                        initial={{ scale: 1, rotate: 0 }}
+                        whileHover={{ scale: 1.05 }}
+                        className="relative sm:w-40 sm:h-40 md:w-48 md:h-48 lg:w-56 lg:h-56 mx-auto cursor-pointer"
+                      >
+                        <Image 
+                          src='/maths2fun.png' 
+                          alt='maths2fun logo' 
+                          className="w-full h-auto max-w-[200px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[320px] object-contain mx-auto"
+                          width={320}
+                          height={320}
+                          sizes="(max-width: 640px) 200px, 
+                                 (max-width: 768px) 240px,
+                                 (max-width: 1024px) 280px,
+                                 320px"
+                          quality={85}
+                          priority={true}
+                        />
+                        <FloatingEmojis />
+                      </motion.div>
+                    </div>
                     <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-6 bg-white/30 backdrop-blur-md rounded-lg shadow-md">
                       <div className="relative w-full">
                         <div className="flex items-center border rounded-lg px-3 py-2 sm:px-4 sm:py-2"
@@ -110,7 +155,7 @@ const Home = () => {
                         </div>
 
                         {isSearchFocused && searchQuery && (
-                          <div className="absolute z-10 w-full mt-2 bg-white border rounded-lg shadow-lg max-h-[60vh] overflow-y-auto">
+                          <div className="absolute z-100 w-full mt-2 bg-white border rounded-lg shadow-lg max-h-[60vh] overflow-y-auto">
                             {filteredApps.length > 0 ? (
                               filteredApps.map((app) => (
                                 <div
@@ -132,7 +177,7 @@ const Home = () => {
                         )}
                       </div>
                     </div>
-                  </header>
+                  </div>
 
                   {myApps.length > 0 && (
                     <AppGrid
@@ -155,6 +200,7 @@ const Home = () => {
           </div>
         </main>
       </div>
+      {/* <ClientOnlyAnimated /> */}
     </div>
   );
 };

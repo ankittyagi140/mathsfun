@@ -30,7 +30,7 @@ const subHeadersLinks:SubHeadersLinks[]=[
         {subHeadersLinks.map(links=>{
             const isActive = pathName === links.link;
             return(
-                <Link key={links.id} href={links.link} className={`flex items-center gap-2 ${isActive ? 'text-blue-600' : 'text-gray-600'} hover:text-blue-600`}>{links.icon && <links.icon/>}{links.title}</Link>
+                <Link key={links.id} href={links.link} className={`flex items-center gap-0 sm:gap-2 ${isActive ? 'text-blue-600' : 'text-gray-600'} hover:text-blue-600`}>{links.icon && <links.icon/>}{links.title}</Link>
             )
         })}
         </nav>

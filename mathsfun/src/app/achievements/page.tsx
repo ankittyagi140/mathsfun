@@ -93,119 +93,103 @@ export default function AchievementsPage() {
   const categories = ['all', ...new Set(achievements.map(a => a.category.toLowerCase()))];
 
   return (
-    <div
-      className="min-h-screen p-8 bg-white p-8 bg-white"
-    >
-      <main className="flex-1 w-full">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="flex gap-6">
-            <div className="flex-1">
-              <div className="mb-8">
-                <h1 className={`text-2xl font-bold `}>Achievements</h1>
-              </div>
+    <div className="min-h-screen bg-white p-4 sm:p-6 lg:p-8">
+      <main className="w-full max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
+            Achievements
+          </h1>
+        </div>
 
-              {/* Category Filter */}
-              {
-                isAuthenticated ?
-                  <> <div className="flex gap-2 mb-6">
-                    {categories.map((category) => (
-                      <button
-                        key={category}
-                        onClick={() => setFilter(category)}
-                        className={`px-4 py-2 rounded-md transition-all duration-200 `}
-                      >
-                        {category.charAt(0).toUpperCase() + category.slice(1)}
-                      </button>
-                    ))}
-                  </div>
+        {/* Category Filter */}
+        {isAuthenticated && (
+          <div className="flex flex-wrap gap-2 sm:gap-4 mb-6">
+            {categories.map((category) => (
+              <button
+                key={category}
+                onClick={() => setFilter(category)}
+                className={`px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base rounded-md transition-all ${
+                  filter === category 
+                    ? 'bg-blue-600 text-white' 
+                    : 'bg-gray-100 hover:bg-gray-200'
+                }`}
+              >
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </button>
+            ))}
+          </div>
+        )}
 
-                    {/* Achievements Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                      {filteredAchievements.map((achievement) => {
-                        const Icon = achievement.icon;
-                        const progressPercentage = (achievement.progress / achievement.total) * 100;
+        {/* Achievements Grid */}
+        {isAuthenticated ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+            {filteredAchievements.map((achievement) => {
+              const Icon = achievement.icon;
+              const progressPercentage = (achievement.progress / achievement.total) * 100;
 
-                        return (
-                          <div
-                            key={achievement.id}
-                            className={` p-6 rounded-lg border relative overflow-hidden`}
-                          >
-                            {/* Achievement Icon */}
-                            <div className="flex items-center gap-4 mb-4">
-                              <div className={`p-2 rounded-full `}>
-                                <Icon className={`h-6 w-6 `} />
-                              </div>
-                              <div>
-                                <h3 className={`font-semibold`}>
-                                  {achievement.title}
-                                </h3>
-                                <span className="text-sm text-gray-500">
-                                  {achievement.category}
-                                </span>
-                              </div>
-                            </div>
-
-                            {/* Description */}
-                            <p className="text-sm text-gray-600 mb-4">
-                              {achievement.description}
-                            </p>
-
-                            {/* Progress Bar */}
-                            <div className="relative pt-1">
-                              <div className="flex mb-2 items-center justify-between">
-                                <div>
-                                  <span className="text-xs font-semibold inline-block text-gray-600">
-                                    Progress
-                                  </span>
-                                </div>
-                                <div className="text-right">
-                                  <span className="text-xs font-semibold inline-block text-gray-600">
-                                    {achievement.progress}/{achievement.total}
-                                  </span>
-                                </div>
-                              </div>
-                              <div className="flex h-2 mb-4 overflow-hidden rounded bg-gray-200">
-                                <div
-                                  style={{ width: `${progressPercentage}%` }}
-                                  className={` transition-all duration-300`}
-                                />
-                              </div>
-                            </div>
-
-                            {achievement.unlocked && (
-                              <div className="absolute top-2 right-2">
-                                <Trophy className="h-5 w-5 text-yellow-500" />
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div></>
-                  :
-                  <div className="min-h-[80vh] flex items-center justify-center px-4">
-                    <div className="text-center max-w-md mx-auto">
-                      <div className="flex justify-center mb-6">
-                        <Lock className="h-16 w-16 text-gray-400" />
-                      </div>
-                      <h1 className="text-2xl font-bold text-gray-800 mb-4">
-                        Login Required
-                      </h1>
-                      <p className="text-gray-600 mb-8">
-                        Please login to track your achievements and see your progress.
-                      </p>
-                      <Link
-                        href="/login"
-                        className="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                      >
-                        Login to Continue
-                      </Link>
+              return (
+                <div
+                  key={achievement.id}
+                  className="p-4 sm:p-6 rounded-lg border hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="p-2 rounded-full bg-gray-100">
+                      <Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-base sm:text-lg font-semibold">
+                        {achievement.title}
+                      </h3>
+                      <span className="text-xs sm:text-sm text-gray-500">
+                        {achievement.category}
+                      </span>
                     </div>
                   </div>
-              }
 
+                  <p className="text-sm sm:text-base text-gray-600 mb-4">
+                    {achievement.description}
+                  </p>
+
+                  {/* Progress Bar */}
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span>Progress</span>
+                      <span>
+                        {achievement.progress}/{achievement.total}
+                      </span>
+                    </div>
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        style={{ width: `${progressPercentage}%` }}
+                        className="h-full bg-blue-600 transition-all"
+                      />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="text-center max-w-md px-4">
+              <div className="mb-4 sm:mb-6">
+                <Lock className="h-12 w-12 sm:h-16 sm:w-16 mx-auto text-gray-400" />
+              </div>
+              <h1 className="text-xl sm:text-2xl font-bold text-gray-800 mb-2 sm:mb-4">
+                Login Required
+              </h1>
+              <p className="text-gray-600 mb-6 sm:mb-8 text-sm sm:text-base">
+                Please login to track your achievements
+              </p>
+              <Link
+                href="/login"
+                className="inline-block bg-blue-600 text-white px-4 py-2 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Login to Continue
+              </Link>
             </div>
           </div>
-        </div>
+        )}
       </main>
     </div>
   );
