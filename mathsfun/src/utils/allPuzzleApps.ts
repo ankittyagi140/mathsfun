@@ -83,7 +83,7 @@ export const allPuzzleApps = [
     {
       id: 'puzzle-11',
       name: 'Number Sequence',
-      icon: '🔣',
+      icon: '🧩',
       description: 'Identify the next number in patterns',
       category: 'Number-Based Puzzles',
       path: '/puzzles/number-sequence',

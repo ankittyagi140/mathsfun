@@ -50,11 +50,10 @@ export default function AppCard({ title, description, icon, href, id, isAdded, o
   return (
     <Link
       href={href}
-      className="group relative bg-white/30 backdrop-blur-lg rounded-xl shadow-lg hover:shadow-xl hover:bg-yellow-100/40 transition-all duration-300 ease-out border border-yellow-300 overflow-hidden transform hover:-translate-y-1.5">
+      className="group relative rounded-xl shadow-lg hover:shadow-xl hover:bg-yellow-100/40 transition-all duration-300 ease-out border border-yellow-300 overflow-hidden transform hover:-translate-y-1.5">
       <button
         onClick={handleAddRemove}
-
-        className="absolute top-3 right-3 z-10 p-1.5 rounded-full bg-white border shadow-md hover:bg-gray-50 transition-colors"
+        className="absolute top-3 right-3 p-1.5 rounded-full bg-white border shadow-md hover:bg-gray-50 transition-colors"
       >
         {isAdded ? (
           <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">

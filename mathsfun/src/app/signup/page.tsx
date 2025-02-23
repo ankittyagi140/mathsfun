@@ -35,31 +35,41 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-white bg-gray-50 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-md w-96">
-        <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">Create Account 🚀</h1>
-        
-        {error && <div className="mb-4 p-3 bg-red-100 text-red-700 rounded">{error}</div>}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="bg-white rounded-xl shadow-sm sm:shadow-md w-full max-w-xs sm:max-w-md px-4 py-8 sm:px-8 sm:py-10">
+        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-6 sm:mb-8 text-blue-600">
+          Create Account 🚀
+        </h1>
 
-        <form onSubmit={handleSignup} className="space-y-4">
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 text-red-700 rounded text-sm sm:text-base">
+            {error}
+          </div>
+        )}
+
+        <form onSubmit={handleSignup} className="space-y-4 sm:space-y-6">
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm sm:text-base font-medium mb-1.5 sm:mb-2">
+              Email
+            </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2.5 sm:p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
               required
             />
           </div>
           
           <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
+            <label className="block text-sm sm:text-base font-medium mb-1.5 sm:mb-2">
+              Password
+            </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2.5 sm:p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm sm:text-base"
               required
             />
           </div>
@@ -67,11 +77,11 @@ export default function SignupPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            className="w-full bg-blue-600 text-white py-2.5 sm:py-3 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 text-sm sm:text-base"
           >
             {isLoading ? (
               <>
-                <Loader className="h-5 w-5" />
+                <Loader className="h-4 w-4 sm:h-5 sm:w-5" />
                 Creating Account...
               </>
             ) : (
@@ -80,9 +90,9 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-600">
+        <p className="mt-6 sm:mt-8 text-center text-xs sm:text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/login" className="text-blue-600 hover:underline">
+          <Link href="/login" className="text-blue-600 hover:underline text-sm sm:text-base">
             Login here
           </Link>
         </p>
@@ -92,6 +102,7 @@ export default function SignupPage() {
             message={snack.message}
             type={snack.type}
             onClose={() => setSnack(null)}
+            className="text-sm sm:text-base"
           />
         )}
       </div>

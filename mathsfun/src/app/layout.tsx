@@ -55,7 +55,6 @@ export const metadata: Metadata = {
 
 // Choose one of these fonts:
 
-
 export default function RootLayout({
   children,
 }: {
@@ -79,7 +78,7 @@ export default function RootLayout({
             <SnackbarProvider>
                 <HydrateStore />
                 <Header />
-                <main className="min-h-screen p-8 bg-white">{children}</main>
+                <main className="min-h-screen bg-white">{children}</main>
                 <Footer />
             </SnackbarProvider>
           </Providers>
