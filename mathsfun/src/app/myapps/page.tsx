@@ -7,7 +7,7 @@ import Snack from '@/components/Snack';
 import { Lock, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
-import { removeApp, addApp } from '@/redux/slices/appsSlice';
+import { removeApp } from '@/redux/slices/appsSlice';
 import Popup from '@/components/Popup';
 
 
@@ -27,18 +27,10 @@ export default function MyAppsPage() {
     setShowConfirm(false);
     
     if (confirmed) {
-      const removedApps = [...myApps];
       myApps.forEach(app => dispatch(removeApp(app.id)));
       setSnack({ 
         message: 'All Apps removed Successfully!',
         type: 'success',
-        action: {
-          label: 'Undo',
-          handler: () => {
-            removedApps.forEach(app => dispatch(addApp(app)));
-            setSnack(null);
-          }
-        }
       });
     }
   };

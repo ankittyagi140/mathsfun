@@ -10,9 +10,10 @@ interface SnackProps {
     label: string;
     handler: () => void;
   };
+  className?: string;
 }
 
-export default function Snack({ message, type, onClose, action }: SnackProps) {
+export default function Snack({ message, type, onClose, action, className }: SnackProps) {
   useEffect(() => {
     const timer = setTimeout(onClose, 5000);
     return () => clearTimeout(timer);
@@ -23,7 +24,7 @@ export default function Snack({ message, type, onClose, action }: SnackProps) {
       type === 'success' 
         ? 'bg-green-100 border border-green-200 text-green-700'
         : 'bg-red-100 border border-red-200 text-red-700'
-    }`}>
+    } ${className || ''}`}>
       {type === 'success' ? (
         <CheckCircle2 className="h-5 w-5 text-green-600" />
       ) : (

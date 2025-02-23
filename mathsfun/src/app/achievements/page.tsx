@@ -1,7 +1,7 @@
 'use client';
 
 
-import { Medal, Trophy, Star, Target, Crown, Zap, BookOpen, Lock } from 'lucide-react';
+import { Medal, Star, Target, Crown, Zap, BookOpen, Lock } from 'lucide-react';
 import { useState } from 'react';
 import Link from 'next/link';
 import { useSelector } from 'react-redux';

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import { auth } from '@/firebase/firebase-config';
 import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, setPersistence, browserSessionPersistence } from 'firebase/auth';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import Loader from '@/components/Loader';
 import Snack from '@/components/Snack';
 
@@ -12,7 +11,6 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [snack, setSnack] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const router = useRouter();
 
   const handleEmailLogin = async (e: React.FormEvent) => {
     e.preventDefault();
