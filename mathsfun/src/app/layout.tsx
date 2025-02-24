@@ -10,7 +10,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 
 // Metadata needs to be in a separate file for app router
 export const metadata: Metadata = {
-  metadataBase: new URL('https://maths2fun.com'),
+  metadataBase: new URL('https://www.maths2fun.com'),
   title: 'Maths2Fun - Interactive Math Learning Platform',
   description: 'Master mathematics through engaging quizzes, interactive lessons, and fun problem-solving challenges. Suitable for all skill levels from beginner to advanced.',
   keywords: ['math learning', 'interactive quizzes', 'mathematics education', 'problem solving', 'online math practice'],
@@ -32,10 +32,28 @@ export const metadata: Metadata = {
     description: 'Engaging math education platform for all ages',
     images: ['/maths2fun-twitter.png'],
   },
+  alternates: {
+    canonical: 'https://www.maths2fun.com',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  verification: {
+    google: 'zLtGgfAeZHTInXu9ONOVqwRsiz_AdOy1yZPcMNcKDqc',
+  }
 };
 
 // Choose one of these fonts:
-
 
 export default function RootLayout({
   children,
@@ -60,7 +78,7 @@ export default function RootLayout({
             <SnackbarProvider>
                 <HydrateStore />
                 <Header />
-                <main className="min-h-screen p-8 bg-white">{children}</main>
+                <main className="min-h-screen bg-white">{children}</main>
                 <Footer />
             </SnackbarProvider>
           </Providers>

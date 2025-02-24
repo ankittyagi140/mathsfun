@@ -9,7 +9,7 @@ export default async function sitemap() {
       lastModified: new Date(),
     },
     ...quizzes.map(quiz => ({
-      url: `https://maths2fun.com/quizzes/${encodeURIComponent(quiz.name)}`,
+      url: `https://www.maths2fun.com/quizzes/${encodeURIComponent(quiz.name)}`,
       lastModified: new Date(),
     })),
   ];

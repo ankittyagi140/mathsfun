@@ -131,4 +131,4 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ---
 
-**Happy Learning!** 🚀 [Visit Maths2Fun](https://maths2fun.com)
+**Happy Learning!** 🚀 [Visit Maths2Fun](https://www.maths2fun.com)

@@ -83,24 +83,24 @@ const Header = () => {
   }
 
   return (
-    <header className="bg-yellow-500 shadow-sm sticky top-0 z-50">
+    <header className="bg-yellow-500/50 shadow-sm sticky top-0 z-50 backdrop-blur-md">
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           <Link href="/" className="flex items-center">
             <Image 
               src="/maths2fun.png"
               alt="maths2fun Logo"
-              width={60}
-              height={40}
+              width={80}
+              height={80}
               priority
-              className="w-12 h-8 md:w-16 md:h-10"
+              className="w-16 h-12 md:w-18 md:h-14"
             />
-            <span className={`text-xl md:text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
+            <span className={`text-xl md:text-2xl font-bold text-gray-800 ${bubblegum.className}`}>
               Maths2Fun
             </span>
           </Link>
           
-          <div className="hidden md:flex">
+          <div className="hidden custom:flex ">
             <SubHeader/>
           </div>
 
@@ -128,16 +128,14 @@ const Header = () => {
                     </>
                   ) : (
                     <>
-                      <span className="md:hidden">🚪</span>
-                      <span className="hidden sm:inline">Logout</span>
+                      <span className="sm:inline">Logout</span>
                     </>
                   )}
                 </button>
               ) : (
                 <button onClick={handleLogin} 
                         className="bg-blue-600 text-white px-3 py-1.5 md:px-4 md:py-2 rounded hover:bg-green-600 transition-colors flex items-center gap-2 text-sm md:text-base">
-                  <span className="md:hidden">🔑</span>
-                  <span className="hidden sm:inline">Login</span>
+                  <span className="sm:inline">Login</span>
                 </button>
               )}
             </div>
@@ -145,7 +143,7 @@ const Header = () => {
         </div>
       </nav>
 
-      <div className="md:hidden p-2 bg-yellow-400">
+      <div className="custom:hidden p-2 bg-yellow-500/50 shadow-sm sticky z-50 backdrop-blur-md">
         <SubHeader/>
       </div>
 
