@@ -10,7 +10,7 @@ import { ThemeProvider } from '@/context/ThemeContext';
 
 // Metadata needs to be in a separate file for app router
 export const metadata: Metadata = {
-  metadataBase: new URL('https://maths2fun.com'),
+  metadataBase: new URL('https://www.maths2fun.com'),
   title: 'Maths2Fun - Interactive Math Learning Platform',
   description: 'Master mathematics through engaging quizzes, interactive lessons, and fun problem-solving challenges. Suitable for all skill levels from beginner to advanced.',
   keywords: ['math learning', 'interactive quizzes', 'mathematics education', 'problem solving', 'online math practice'],
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     images: ['/maths2fun-twitter.png'],
   },
   alternates: {
-    canonical: 'https://maths2fun.com',
+    canonical: 'https://www.maths2fun.com',
   },
   robots: {
     index: true,

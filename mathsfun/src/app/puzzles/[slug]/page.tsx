@@ -41,7 +41,7 @@ export  default async function PuzzlePage({ params }: PageProps) {
             "@context": "https://schema.org",
             "@type": "VideoGame",
             "name": puzzle.name,
-            "url": `https://maths2fun.com/puzzles/${slug}`,
+            "url": `https://www.maths2fun.com/puzzles/${slug}`,
             "playMode": "SinglePlayer",
             "gamePlatform": "Web",
             "author": {

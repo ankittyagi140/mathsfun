@@ -3,11 +3,11 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "Maths2Fun",
-    "url": "https://maths2fun.com",
+    "url": "https://www.maths2fun.com",
 
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://maths2fun.com/search?q={search_term}",
+      "target": "https://www.maths2fun.com/search?q={search_term}",
       "query-input": "required name=search_term"
 
     }

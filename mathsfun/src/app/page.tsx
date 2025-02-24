@@ -98,7 +98,7 @@ const Home = () => {
   const handleAppClick = (app: App) => () => {
     router.push(app.path);
   }
-  const myApps = allApps.filter(app => addedAppIds.includes(app.id));
+  // const myApps = allApps.filter(app => addedAppIds.includes(app.id));
 
   const filteredApps = allApps.filter(app =>
     app.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -179,12 +179,12 @@ const Home = () => {
                     </div>
                   </div>
 
-                  {myApps.length > 0 && (
+                  {/* {myApps.length > 0 && (
                     <AppGrid
                       apps={myApps}
                       title="My Apps"
                     />
-                  )}
+                  )} */}
 
                   <section className="mb-12">
                     <div className="flex justify-between items-center mb-6">
