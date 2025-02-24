@@ -35,7 +35,7 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-white-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
       <div className="bg-white rounded-xl shadow-sm sm:shadow-md w-full max-w-xs sm:max-w-md px-4 py-8 sm:px-8 sm:py-10">
         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-center mb-6 sm:mb-8 text-blue-600">
           Create Account 🚀

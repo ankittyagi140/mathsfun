@@ -17,7 +17,7 @@ export default function MyAppsPage() {
   const { isAuthenticated } = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const [showConfirm, setShowConfirm] = useState(false);
-  
+
 
   const handleRemoveAll = () => {
     setShowConfirm(true);
@@ -25,10 +25,10 @@ export default function MyAppsPage() {
 
   const handleConfirm = (confirmed: boolean) => {
     setShowConfirm(false);
-    
+
     if (confirmed) {
       myApps.forEach(app => dispatch(removeApp(app.id)));
-      setSnack({ 
+      setSnack({
         message: 'All Apps removed Successfully!',
         type: 'success',
       });
@@ -43,7 +43,7 @@ export default function MyAppsPage() {
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
               My Applications
             </h1>
-            {myApps.length > 0 && (
+            {isAuthenticated && (myApps.length > 0) ? (
               <button
                 onClick={handleRemoveAll}
                 className="text-red-600 hover:text-red-700 flex items-center gap-1.5 text-sm sm:text-base"
@@ -51,21 +51,21 @@ export default function MyAppsPage() {
                 <Trash2 className="w-4 h-4" />
                 Remove All
               </button>
-            )}
+            ) : null}
           </div>
         </div>
 
         {isAuthenticated ? (
           <>
             {/* Sorting Controls */}
-            <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 sm:mb-8">
+            {/* <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6 sm:mb-8">
               <div className="flex-1 sm:max-w-xs">
                 <select className="w-full px-4 py-2 border rounded-lg bg-white text-sm sm:text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                   <option>Sort by Recent</option>
                   <option>Sort by Name</option>
                 </select>
               </div>
-            </div>
+            </div> */}
 
             {/* Apps Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
@@ -74,10 +74,12 @@ export default function MyAppsPage() {
                   <AppCard
                     key={app.id}
                     id={app.id}
-                            title={app.title}
-                            description={app.description}
-                            href={app.href}
-                            icon={app.icon}
+                    title={app.title}
+                    description={app.description}
+                    href={app.href}
+                    icon={app.icon}
+                    isAdded
+                    onRemove={(appId) => dispatch(removeApp(appId))}
                   />
                 ))
               ) : (
@@ -106,8 +108,7 @@ export default function MyAppsPage() {
                 href="/login"
                 className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base rounded-lg transition-colors"
               >
-                Sign In Now
-              </Link>
+                Login to continue              </Link>
             </div>
           </div>
         )}
