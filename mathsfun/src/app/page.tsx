@@ -112,7 +112,7 @@ const Home = () => {
             <div className="flex gap-4 sm:gap-6">
               <div className="flex-1">
                 <>
-                  <div className="mb-6 sm:mb-8">
+                  <div className="mb-6 sm:mb-8 relative z-10">
                     <div className="hover:scale-105 transition-transform duration-300 hover:-translate-y-1 will-change-transform">
                       <motion.div
                         animate={controls}

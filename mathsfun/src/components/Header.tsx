@@ -95,7 +95,7 @@ const Header = () => {
               priority
               className="w-16 h-12 md:w-18 md:h-14"
             />
-            <span className={`text-xl md:text-2xl font-bold pl-2 text-gray-800 ${bubblegum.className}`}>
+            <span className={`text-xl md:text-2xl font-bold text-gray-800 ${bubblegum.className}`}>
               Maths2Fun
             </span>
           </Link>

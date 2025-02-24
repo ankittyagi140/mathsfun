@@ -26,7 +26,7 @@ const subHeadersLinks:SubHeadersLinks[]=[
 ]
 
     return (
-        <nav className='flex items-center justify-center gap-8'>
+        <nav className='flex items-center justify-center gap-2'>
         {subHeadersLinks.map(links=>{
             const isActive = pathName === links.link;
             return(

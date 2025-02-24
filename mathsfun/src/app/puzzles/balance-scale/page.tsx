@@ -117,19 +117,26 @@ const BalanceVisualization = ({
   leftTotal: number;
   rightTotal: number;
 }) => {
-  const leftPositions = [20, 80, 140];
-  const rightPositions = [40, 120];
+  const leftPositions = useMemo(() => {
+    const base = window.innerWidth < 640 ? 20 : 40;
+    return [base, base + 60, base + 120];
+  }, []);
+
+  const rightPositions = useMemo(() => {
+    const base = window.innerWidth < 640 ? 20 : 40;
+    return [base, base + 80];
+  }, []);
 
   return (
-    <div className="relative h-64">
+    <div className="relative h-48 md:h-64 lg:h-80">
       <motion.div
-        className="absolute left-20 -translate-x-1/2 w-4/5 h-2 bg-gray-400 top-1/2 origin-center"
+        className="absolute left-20 -translate-x-1/2 w-4/5 h-1 md:h-2 bg-gray-400 top-1/2 origin-center"
         animate={{
           rotate: isBalanced ? 0 : leftTotal > rightTotal ? -3 : 3
         }}
         transition={{ type: 'spring', stiffness: 300 }}
       >
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-gray-600 rounded-full" />
+        <div className="absolute -top-2 md:-top-3 left-1/2 -translate-x-1/2 w-4 h-4 md:w-6 md:h-6 bg-gray-600 rounded-full" />
       </motion.div>
 
       <div className="absolute left-0 w-1/2 h-full">
@@ -137,13 +144,18 @@ const BalanceVisualization = ({
           <motion.div
             key={weight.id}
             className="absolute"
-            style={{ left: `${leftPositions[index]}px`, bottom: '50px' }}
+            style={{ 
+              left: `${leftPositions[index]}px`, 
+              bottom: '30px',
+              width: 'clamp(3rem, 8vw, 5rem)',
+              height: 'clamp(3rem, 8vw, 5rem)'
+            }}
             animate={{
-              y: isBalanced ? 0 : leftTotal > rightTotal ? 0 : [0, -15, 0]
+              y: isBalanced ? 0 : leftTotal > rightTotal ? 0 : [0, -10, 0]
             }}
             transition={{ repeat: Infinity, duration: 1.5 }}
           >
-            <div className="w-14 h-14 bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+            <div className="w-full h-full bg-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-xl shadow-lg">
               {weight.value}kg
             </div>
           </motion.div>
@@ -155,35 +167,40 @@ const BalanceVisualization = ({
           <motion.div
             key={weight.id}
             className="absolute"
-            style={{ right: `${rightPositions[index]}px`, bottom: '50px' }}
+            style={{ 
+              right: `${rightPositions[index]}px`, 
+              bottom: '30px',
+              width: 'clamp(3rem, 8vw, 5rem)',
+              height: 'clamp(3rem, 8vw, 5rem)'
+            }}
             animate={{
-              y: isBalanced ? 0 : rightTotal > leftTotal ? 0 : [0, -15, 0]
+              y: isBalanced ? 0 : rightTotal > leftTotal ? 0 : [0, -10, 0]
             }}
             transition={{ repeat: Infinity, duration: 1.5 }}
           >
-            <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+            <div className="w-full h-full bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm md:text-xl shadow-lg">
               {weight.value}kg
             </div>
           </motion.div>
         ))}
       </div>
 
-      <div className="absolute top-4 left-1/2 -translate-x-1/2 text-center">
+      <div className="absolute top-2 md:top-4 left-1/2 -translate-x-1/2 text-center">
         <motion.div
-          className={`flex items-center gap-2 text-lg font-bold ${
+          className={`flex items-center gap-1 md:gap-2 text-sm md:text-lg font-bold ${
             isBalanced ? 'text-green-600' : 'text-orange-600'
           }`}
         >
           {isBalanced ? (
-            <div className="flex items-center">
-              <Check className="w-6 h-6" />
+            <>
+              <Check className="w-4 h-4 md:w-6 md:h-6" />
               <span>Balanced!</span>
-            </div>
+            </>
           ) : (
-            <div className="flex items-center">
-              <X className="w-6 h-6" />
+            <>
+              <X className="w-4 h-4 md:w-6 md:h-6" />
               <span>{leftTotal > rightTotal ? 'Left heavier' : 'Right heavier'}</span>
-            </div>
+            </>
           )}
         </motion.div>
       </div>
@@ -252,20 +269,20 @@ export default function BalanceScale() {
   };
 
   return (
-    <div className="min-h-screen p-6 bg-white-50">
+    <div className="min-h-screen p-4 sm:p-6 bg-gray-50">
       {showInstructions && (
         <InstructionsModal key="instructions" onClose={() => setShowInstructions(false)} />
       )}
 
       <div className="max-w-2xl mx-auto">
-        <h1 className="text-3xl font-bold mb-6 text-center">
+        <h1 className="text-xl sm:text-3xl font-bold mb-4 sm:mb-6 text-center">
           Balance the Scale! ⚖️
-          <span className="block text-xl mt-2 font-normal">
+          <span className="block text-sm sm:text-xl mt-1 sm:mt-2 font-normal">
             {puzzle.question}
           </span>
         </h1>
 
-        <div className="bg-white rounded-xl shadow-lg p-6">
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-md sm:shadow-lg p-4 sm:p-6">
           <BalanceVisualization 
             puzzle={puzzle}
             isBalanced={isBalanced}
@@ -273,24 +290,30 @@ export default function BalanceScale() {
             rightTotal={rightTotal}
           />
 
-          <form onSubmit={handleSubmit} className="mt-8 flex gap-4 items-center justify-center">
+          <form onSubmit={handleSubmit} className="mt-4 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center">
             <input 
               type="number" 
               value={userAnswer} 
               onChange={e => setUserAnswer(e.target.value)} 
-              className="w-32 px-4 py-2 text-2xl font-bold text-center border-4 border-blue-300 rounded-lg" 
+              className="w-full sm:w-32 px-3 sm:px-4 py-2 text-lg sm:text-2xl font-bold text-center border-2 sm:border-4 border-blue-300 rounded-lg" 
               required 
             />
-            <button type="submit" className="px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-bold">
-              Check
-            </button>
-            <button 
-              type="button" 
-              onClick={handleReset} 
-              className="px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
-            >
-              <RotateCw className="inline-block mr-2" /> Reset
-            </button>
+            <div className="flex gap-3 sm:gap-4 w-full sm:w-auto">
+              <button 
+                type="submit" 
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-bold text-sm sm:text-base"
+              >
+                Check
+              </button>
+              <button 
+                type="button" 
+                onClick={handleReset} 
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm sm:text-base"
+              >
+                <RotateCw className="inline-block mr-1 sm:mr-2 w-4 h-4" /> 
+                Reset
+              </button>
+            </div>
           </form>
         </div>
 
