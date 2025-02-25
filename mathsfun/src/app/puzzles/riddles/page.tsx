@@ -1,248 +1,178 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
-import Popup from '../../../components/Popup';
-import ProgressBar from '../../../components/ProgressBar';
-import { motion } from 'framer-motion';
-import ReactConfetti from 'react-confetti';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Info, Puzzle, RefreshCw, ChevronDown, ChevronUp, ArrowLeft, Lightbulb } from 'lucide-react';
+import Link from 'next/link';
 import { allRiddles } from '@/utils/allRiddles';
 
-type Riddle = {
-  question: string;
-  answer: string;
-  hint: string;
-  difficulty: number;
-};
 
-const riddles:Riddle[] = allRiddles;
 
-// Add animation variants
-const inputVariants = {
-  shake: {
-    x: [-5, 5, -5, 5, 0],
-    transition: { duration: 0.5 }
-  },
-  correct: {
-    scale: [1, 1.1, 1],
-    backgroundColor: "#DCFCE7",
-    transition: { duration: 0.3 }
-  },
-  wrong: {
-    backgroundColor: "#FEE2E2",
-    scale: [1, 1.05, 1],
-    transition: { duration: 0.4 }
-  }
-};
+const MATH_RIDDLES = allRiddles;
+  
 
-// Add difficulty levels
-const DIFFICULTY_LEVELS = [
-  { id: 'all', label: 'All Levels' },
-  { id: '1', label: 'Easy ★' },
-  { id: '2', label: 'Medium ★★' },
-  { id: '3', label: 'Hard ★★★' },
-];
+export default function RiddlesPage() {
+  const [showHints, setShowHints] = useState<{ [key: number]: boolean }>({});
+  const [showAnswers, setShowAnswers] = useState<{ [key: number]: boolean }>({});
+  const [difficultyFilter, setDifficultyFilter] = useState<'all' | Riddle['difficulty']>('all');
 
-const RiddlePuzzle = () => {
-  const [currentRiddle, setCurrentRiddle] = useState(0);
-  const [userAnswer, setUserAnswer] = useState('');
-  const [showHint, setShowHint] = useState(false);
-  const [isCorrect, setIsCorrect] = useState(false);
-  const [score, setScore] = useState(0);
-  const [showHelp, setShowHelp] = useState(false);
-  const [isWrongAnswer, setIsWrongAnswer] = useState(false);
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>('all');
-  const [filteredRiddles, setFilteredRiddles] = useState<Riddle[]>(riddles);
+  const filteredRiddles = MATH_RIDDLES.filter(riddle => 
+    difficultyFilter === 'all' ? true : riddle.difficulty === difficultyFilter
+  );
 
-  const nextRiddle = useCallback(() => {
-    if (currentRiddle < riddles.length - 1) {
-      setCurrentRiddle(prev => prev + 1);
-      setUserAnswer('');
-      setShowHint(false);
-      setIsCorrect(false);
+  const toggleHint = (index: number) => {
+    setShowHints(prev => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const toggleAnswer = (index: number) => {
+    setShowAnswers(prev => ({ ...prev, [index]: !prev[index] }));
+  };
+
+  const getDifficultyColor = (difficulty: Riddle['difficulty']) => {
+    switch(difficulty) {
+      case 'easy': return 'bg-green-100 text-green-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'hard': return 'bg-red-100 text-red-800';
     }
-  }, [currentRiddle]);
-
-  const checkAnswer = useCallback(() => {
-    const cleanedAnswer = userAnswer.trim().toUpperCase().replace(/[^A-Z]/g, '');
-    const correctAnswer = riddles[currentRiddle].answer.toUpperCase().replace(/[^A-Z]/g, '');
-
-    if (cleanedAnswer === correctAnswer) {
-      setIsCorrect(true);
-      setScore(prev => prev + (3 - riddles[currentRiddle].difficulty));
-      setTimeout(nextRiddle, 2000);
-    } else {
-      setUserAnswer('');
-      setIsWrongAnswer(true);
-    }
-  }, [currentRiddle, nextRiddle, userAnswer]);
-
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === 'Enter') checkAnswer();
-    };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [checkAnswer]);
-
-  // Add effect to filter riddles
-  useEffect(() => {
-    if (selectedDifficulty === 'all') {
-      setFilteredRiddles(riddles);
-    } else {
-      setFilteredRiddles(
-        riddles.filter(r => r.difficulty === parseInt(selectedDifficulty))
-      );
-    }
-    setCurrentRiddle(0);
-    setUserAnswer('');
-    setShowHint(false);
-    setIsCorrect(false);
-  }, [selectedDifficulty]);
+  };
 
   return (
-    <div className="min-h-screen p-4 sm:p-6 md:p-8 bg-gray-50">
-      <div className="max-w-3xl mx-auto space-y-6 sm:space-y-8">
-        {/* Header */}
-        <div className="text-center">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-blue-600 mb-4">
-            🧠 Riddle Challenge
-          </h1>
-          
-          {/* Difficulty Selector */}
-          <div className="flex flex-wrap gap-2 justify-center mb-4">
-            {DIFFICULTY_LEVELS.map((level) => (
-              <motion.button
-                key={level.id}
-                onClick={() => setSelectedDifficulty(level.id)}
-                className={`
-                  px-4 py-2 rounded-full text-sm sm:text-base
-                  ${selectedDifficulty === level.id 
-                    ? 'bg-blue-600 text-white' 
-                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}
-                `}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {level.label}
-              </motion.button>
-            ))}
-          </div>
-
-          <ProgressBar 
-            progress={(currentRiddle + 1) / filteredRiddles.length * 100} 
-            className="h-3 sm:h-4"
-          />
-        </div>
-
-        {/* Game Area */}
-        <div className="bg-white rounded-xl shadow-lg p-6 sm:p-8">
-          {/* Riddle Card */}
-          <div className="mb-6 sm:mb-8 bg-indigo-50 p-4 sm:p-6 rounded-lg">
-            <div className="flex justify-between items-start mb-4">
-              <span className="text-sm sm:text-base font-medium text-indigo-600">
-                Riddle #{currentRiddle + 1} of {filteredRiddles.length}
-              </span>
-              <span className="text-xs sm:text-sm text-yellow-600">
-                Difficulty: {'★'.repeat(filteredRiddles[currentRiddle].difficulty)}
-              </span>
-            </div>
-            
-            <p className="text-lg sm:text-xl md:text-2xl font-medium mb-4">
-              {filteredRiddles[currentRiddle].question}
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <motion.input
-                type="text"
-                value={userAnswer}
-                onChange={(e) => setUserAnswer(e.target.value.toUpperCase())}
-                placeholder="Type your answer..."
-                className="flex-1 px-4 py-2 sm:py-3 border rounded-lg text-base sm:text-lg"
-                variants={inputVariants}
-                animate={isWrongAnswer ? 'shake' : isCorrect ? 'correct' : 'default'}
-                onAnimationComplete={() => {
-                  if (isWrongAnswer) {
-                    setIsWrongAnswer(false);
-                  }
-                }}
-                style={{
-                  backgroundColor: isWrongAnswer ? '#FEE2E2' : '#fff'
-                }}
-              />
-              <button
-                onClick={checkAnswer}
-                className="px-6 py-2 sm:py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 text-sm sm:text-base"
-              >
-                Submit
-              </button>
-            </div>
-          </div>
-
-          {/* Hint & Help */}
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6">
-            <button
-              onClick={() => setShowHint(true)}
-              className="p-3 bg-orange-50 text-orange-600 rounded-lg hover:bg-orange-100 text-sm sm:text-base"
-            >
-              💡 Show Hint
-            </button>
-            <button
-              onClick={() => setShowHelp(true)}
-              className="p-3 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100 text-sm sm:text-base"
-            >
-              🆘 Need Help?
-            </button>
+    <div className="min-h-screen bg-gray-50 p-4 sm:p-6 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+          <Link href="/" className="flex items-center text-blue-600 hover:text-blue-700">
+            <ArrowLeft className="w-5 h-5 mr-2" />
+            Back to All Puzzles
+          </Link>
+          <div className="flex items-center gap-2">
+            <Puzzle className="w-6 h-6 text-purple-600" />
+            <h1 className="text-2xl font-bold text-gray-800">Math Riddles</h1>
           </div>
         </div>
 
-        {/* Score Panel */}
-        <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 text-center">
-          <h3 className="text-xl sm:text-2xl font-bold mb-2">Score: {score}</h3>
-          <p className="text-gray-600 sm:text-lg">
-            Correct answers: {currentRiddle} / {filteredRiddles.length}
+        {/* Difficulty Filter */}
+        <div className="mb-8 flex flex-wrap gap-3">
+          <button
+            onClick={() => setDifficultyFilter('all')}
+            className={`px-4 py-2 rounded-lg ${
+              difficultyFilter === 'all' 
+                ? 'bg-blue-600 text-white' 
+                : 'bg-white text-gray-600 border border-gray-200'
+            }`}
+          >
+            All ({MATH_RIDDLES.length})
+          </button>
+          {['easy', 'medium', 'hard'].map(diff => (
+            <button
+              key={diff}
+              onClick={() => setDifficultyFilter(diff as Riddle['difficulty'])}
+              className={`px-4 py-2 rounded-lg capitalize ${
+                difficultyFilter === diff
+                  ? `${getDifficultyColor(diff as Riddle['difficulty'])} font-bold`
+                  : 'bg-white text-gray-600 border border-gray-200'
+              }`}
+            >
+              {diff} ({MATH_RIDDLES.filter(r => r.difficulty === diff).length})
+            </button>
+          ))}
+        </div>
+
+        {/* Riddles Grid */}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          {filteredRiddles.map((riddle, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-6"
+            >
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className={`${getDifficultyColor(riddle.difficulty)} px-3 py-1 rounded-full text-sm`}>
+                      {riddle.difficulty}
+                    </span>
+                  </div>
+                  <p className="text-lg font-medium text-gray-800 mb-4">
+                    {riddle.question}
+                  </p>
+                  
+                  {/* Hint Section */}
+                  <div className="mb-4">
+                    <button
+                      onClick={() => toggleHint(index)}
+                      className="flex items-center text-purple-600 hover:text-purple-700 text-sm"
+                    >
+                      <Lightbulb className="w-4 h-4 mr-2" />
+                      {showHints[index] ? 'Hide Hint' : 'Show Hint'}
+                    </button>
+                    <AnimatePresence>
+                      {showHints[index] && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-2 text-purple-600 text-sm"
+                        >
+                          💡 Hint: {riddle.hint}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Answer Section */}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={() => toggleAnswer(index)}
+                      className="flex items-center text-blue-600 hover:text-blue-700"
+                    >
+                      {showAnswers[index] ? (
+                        <>
+                          <ChevronUp className="w-5 h-5 mr-2" />
+                          Hide Answer
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="w-5 h-5 mr-2" />
+                          Show Answer
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  <AnimatePresence>
+                    {showAnswers[index] && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="pt-4 mt-4 border-t border-gray-100"
+                      >
+                        <div className="flex items-center gap-2 text-green-600">
+                          <Info className="w-5 h-5" />
+                          <span className="font-medium">Answer:</span>
+                        </div>
+                        <p className="mt-2 text-gray-700">{riddle.answer}</p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+                <div className="text-4xl font-bold text-gray-200">#{index + 1}</div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-8 text-center text-gray-500">
+          {filteredRiddles.length === 0 && (
+            <div className="py-12 text-gray-400">
+              No riddles found for this difficulty level
+            </div>
+          )}
+          <p className="text-sm">
+            Showing {filteredRiddles.length} of {MATH_RIDDLES.length} riddles
           </p>
         </div>
-
-        {/* Popups */}
-        {showHint && (
-          <Popup title="Hint" onClose={() => setShowHint(false)}>
-            <div className="text-center p-4 sm:p-6">
-              <p className="text-lg sm:text-xl font-medium mb-4">
-                {filteredRiddles[currentRiddle].hint}
-              </p>
-              <button
-                className="px-6 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600"
-                onClick={() => setShowHint(false)}
-              >
-                Close
-              </button>
-            </div>
-          </Popup>
-        )}
-
-        {showHelp && (
-          <Popup title="How to Play" onClose={() => setShowHelp(false)}>
-            <div className="space-y-4 p-4 sm:p-6">
-              <ul className="list-disc pl-5 space-y-3 text-sm sm:text-base">
-                <li>Read the riddle carefully</li>
-                <li>Type your answer in the input box</li>
-                <li>Press Enter or click Submit to check</li>
-                <li>Use hints sparingly - they reduce points!</li>
-              </ul>
-            </div>
-          </Popup>
-        )}
-
-        {isCorrect && (
-          <Popup title="🎉 Correct Answer!" onClose={() => setIsCorrect(false)}>
-            <div className="text-center p-4 sm:p-6">
-              <p className="text-xl sm:text-2xl mb-4">Well done! Next riddle loading...</p>
-            </div>
-          </Popup>
-        )}
-        {isCorrect && <ReactConfetti recycle={false} numberOfPieces={300} />}
       </div>
     </div>
   );
-};
-
-export default RiddlePuzzle; 
+} 

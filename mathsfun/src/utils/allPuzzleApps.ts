@@ -148,5 +148,25 @@ export const allPuzzleApps = [
       path: '/puzzles/balance-scale',
       slug: 'balance-scale',
       createdAt: new Date('2025-01-15')
+    },
+    {
+      id: 'puzzle-17',
+      name: 'Guess the Weight',
+      icon: '🏋️',
+      description: 'Estimate object weights using balance comparisons',
+      category: 'Puzzles',
+      path: '/puzzles/guess-weight',
+      slug: 'guess-weight',
+      createdAt: new Date('2025-01-16')
+    },
+    {
+      id: 'puzzle-18',
+      name: 'Clock Challenge',
+      icon: '🕒',
+      description: 'Solve time-related math puzzles using clock faces',
+      category: 'Puzzles',
+      path: '/puzzles/clock-challenges',
+      slug: 'clock-challenges',
+      createdAt: new Date('2025-01-17')
     }
   ] 

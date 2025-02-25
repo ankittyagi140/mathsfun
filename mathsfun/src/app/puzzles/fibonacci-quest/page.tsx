@@ -5,7 +5,8 @@ import { InfoIcon, LightbulbIcon } from 'lucide-react';
 
 export default function FibonacciQuest() {
   const [sequence, setSequence] = useState<number[]>([]);
-  const [userInput, setUserInput] = useState<string>('');
+  const [missingIndex, setMissingIndex] = useState<number>(2);
+  const [userInputs, setUserInputs] = useState<(number | null)[]>([]);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState(1);
@@ -13,15 +14,32 @@ export default function FibonacciQuest() {
   const [showInstructions, setShowInstructions] = useState(true);
 
   const generatePuzzle = useCallback(() => {
-    const puzzleSequence = Array(5)
-      .fill(null)
-      .map((_, i) => {
-        if (i < 2) return Math.floor(Math.random() * 5) + 1;
-        return null; // Mark missing numbers as null
-      }) as number[]; // Add type assertion here
+    const base1 = Math.floor(Math.random() * 5) + 1;
+    const base2 = Math.floor(Math.random() * 5) + 1;
+    
+    // Generate full valid Fibonacci sequence
+    const fullSequence = [
+      base1,
+      base2,
+      base1 + base2,
+      base2 + (base1 + base2),
+      (base1 + base2) + (base2 + (base1 + base2))
+    ];
 
+    // Ensure sequence is valid
+    if (fullSequence.some(num => num <= 0 || !Number.isInteger(num))) {
+      return generatePuzzle(); // Regenerate if invalid
+    }
+
+    // Randomly choose a position to hide (but not first two)
+    const hideIndex = Math.floor(Math.random() * 3) + 2;
+    const puzzleSequence = fullSequence.map((num, index) => 
+      index === hideIndex ? null : num
+    );
+
+    setMissingIndex(hideIndex);
+    setUserInputs(puzzleSequence.map(() => null));
     setSequence(puzzleSequence);
-    setUserInput('');
     setIsCorrect(null);
   }, []);
 
@@ -29,28 +47,25 @@ export default function FibonacciQuest() {
     generatePuzzle();
   }, [generatePuzzle]);
 
+  const handleInputChange = (index: number, value: string) => {
+    const newInputs = [...userInputs];
+    newInputs[index] = value === '' ? null : Number(value);
+    setUserInputs(newInputs);
+  };
+
   const validateAnswer = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Find the index of the missing number
-    const missingIndex = sequence.findIndex(num => num === null);
+    // Get the correct answer based on Fibonacci rules
+    const correctAnswer = sequence[missingIndex - 1]! + sequence[missingIndex - 2]!;
     
-    if (missingIndex === -1) return; // No missing number
-    
-    // Calculate correct number based on previous two numbers
-    const prev1 = sequence[missingIndex - 2];
-    const prev2 = sequence[missingIndex - 1];
-    
-    if (prev1 === null || prev2 === null) return; // Invalid sequence
-    
-    const correctNumber = prev1 + prev2;
-    
-    if (Number(userInput) === correctNumber) {
+    if (userInputs[missingIndex] === correctAnswer) {
       setIsCorrect(true);
       setScore(prev => prev + 10 * level);
       setTimeout(() => {
         setLevel(prev => prev + 1);
-      }, 1500);
+        generatePuzzle();
+      }, 5000);
     } else {
       setIsCorrect(false);
     }
@@ -97,12 +112,15 @@ export default function FibonacciQuest() {
                   {num === null ? (
                     <input
                       type="number"
-                      value={userInput}
-                      onChange={(e) => setUserInput(e.target.value)}
+                      value={userInputs[index] || ''}
+                      onChange={(e) => handleInputChange(index, e.target.value)}
                       className={`w-20 text-center border-2 rounded p-2 ${
-                        isCorrect === false ? 'border-red-500' : 'border-gray-300'
+                        isCorrect === false && index === missingIndex 
+                          ? 'border-red-500' 
+                          : 'border-gray-300'
                       }`}
                       placeholder="?"
+                      disabled={index !== missingIndex}
                     />
                   ) : (
                     <span className="px-4 py-2 bg-gray-100 rounded">{num}</span>

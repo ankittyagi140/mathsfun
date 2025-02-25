@@ -244,21 +244,20 @@ export default function BalanceScale() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const answer = parseFloat(userAnswer);
+    
+    if (!puzzle) return;
 
-    if (Math.abs(answer - puzzle.correctAnswer) < 0.01 && !isBalanced) {
-      setPuzzle(prev => ({
-        ...prev!,
-        rightWeights: prev!.rightWeights.map(w => ({
-          ...w,
-          value: answer
-        }))
-      }));
+    const userValue = parseInt(userAnswer);
+    const leftTotal = puzzle.leftWeights.reduce((sum, w) => sum + w.value, 0);
+    const rightTotal = puzzle.rightWeights.reduce((sum, w) => sum + w.value, 0) + userValue;
 
-      setTimeout(() => {
-        setPuzzle(generatePuzzle());
-        setUserAnswer('');
-      }, 2000);
+    if (leftTotal === rightTotal) {
+      alert('Success! The scale is balanced!');
+      setPuzzle(generatePuzzle());
+      setUserAnswer('');
+    } else {
+      alert(`Incorrect. Current balance: Left ${leftTotal}kg vs Right ${rightTotal}kg`);
+      setHintsUsed(prev => prev + 1);
     }
   };
 
